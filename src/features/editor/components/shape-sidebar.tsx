@@ -7,17 +7,19 @@ import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-import { ActiveTool } from '../types';
+import { ActiveTool, Editor } from '../types';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 
 type ShapeSidebarProps = {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (too: ActiveTool) => void;
 }
 
 export default function ShapeSidebar(props: ShapeSidebarProps) {
   const {
+    editor,
     activeTool,
     onChangeActiveTool
   } = props;
@@ -41,33 +43,33 @@ export default function ShapeSidebar(props: ShapeSidebarProps) {
         <div className="grid grid-cols-3 gap-4 p-4">
           <ShapeTool
             icon={FaCircle}
-            onClick={() => {}}
+            onClick={() => editor?.addCircle()}
           />
 
           <ShapeTool
             icon={FaSquare}
-            onClick={() => {}}
+            onClick={() => editor?.addSoftRectangle()}
           />
 
           <ShapeTool
             icon={FaSquareFull}
-            onClick={() => {}}
+            onClick={() => editor?.addRectangle()}
           />
 
           <ShapeTool
             icon={IoTriangle}
-            onClick={() => {}}
+            onClick={() => editor?.addTriangle()}
           />
 
           <ShapeTool
             icon={IoTriangle}
-            onClick={() => {}}
             iconClassName="rotate-180"
+            onClick={() => editor?.addInverseTriangle()}
           />
 
           <ShapeTool
             icon={FaDiamond}
-            onClick={() => {}}
+            onClick={() => editor?.addDiamond()}
           />
         </div>
       </ScrollArea>

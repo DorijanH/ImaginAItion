@@ -15,7 +15,7 @@ import Footer from './footer';
 export default function Editor() {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
 
-  const { init } = useEditor();
+  const { init, editor } = useEditor();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,11 @@ export default function Editor() {
 
       <div className="absolute top-[68px] flex h-[calc(100%-68px)] w-full">
         <Sidebar activeTool={activeTool} onChangeActiveTool={handleChangeActiveTool}  />
-        <ShapeSidebar activeTool={activeTool} onChangeActiveTool={handleChangeActiveTool} />
+        <ShapeSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
 
         <main className="relative flex flex-1 flex-col overflow-auto">
           <Toolbar />

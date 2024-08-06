@@ -1,6 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { fabric } from 'fabric';
 
+import { getWorkspace } from '../helpers';
+
 type UseAutoResizeProps = {
   canvas: fabric.Canvas | null;
   container: HTMLDivElement | null;
@@ -24,9 +26,7 @@ export function useAutoResize(props: UseAutoResizeProps) {
     const center = canvas.getCenter();
     const zoomRatio = 0.85;
 
-    const localWorkspace = canvas
-      .getObjects()
-      .find((object) => object.name === 'clip');
+    const localWorkspace = getWorkspace(canvas);
 
     // @ts-ignore
     const scale = fabric.util.findScaleToFit(localWorkspace, { width, height });
