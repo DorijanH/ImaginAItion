@@ -1,11 +1,5 @@
-import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div>
-      <Button size="sm">
-        Click Me Twice
-      </Button>
-    </div>
-  );
+  redirect('/editor/project-1');
 }
