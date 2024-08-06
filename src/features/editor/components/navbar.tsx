@@ -4,6 +4,7 @@ import { CiFileOn } from 'react-icons/ci';
 import { BsCloudCheck } from 'react-icons/bs';
 import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import {
   DropdownMenu,
@@ -14,9 +15,20 @@ import {
 import { Button } from '@/components/ui/button';
 import Hint from '@/components/hint';
 
+import { ActiveTool } from '../types';
 import Logo from './logo';
 
-export default function Navbar() {
+type NavbarProps = {
+  activeTool: ActiveTool;
+  onChangeActiveTool: (tool: ActiveTool) => void;
+}
+
+export default function Navbar(props: NavbarProps) {
+  const {
+    activeTool,
+    onChangeActiveTool
+  } = props;
+
   return (
     <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
       <Logo />
@@ -57,7 +69,8 @@ export default function Navbar() {
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => console.log('ON SELECT CLICK')}
+            onClick={() => onChangeActiveTool('select')}
+            className={cn(activeTool === 'select' && 'bg-gray-100')}
           >
             <MousePointerClick className="size-4" />
           </Button>

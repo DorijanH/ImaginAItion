@@ -5,6 +5,7 @@
     "plugin:import/typescript",
     "plugin:tailwindcss/recommended"
   ],
+  "plugins": ["@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "settings": {
     "tailwindcss": {
@@ -15,12 +16,12 @@
     "no-var": "error",
     "prefer-const": "error",
     "no-extra-semi": "error",
-    "no-unused-vars": "error",
     "no-trailing-spaces": "error",
     "semi": [ 2, "always" ],
     "indent": [ "error", 2 ],
     "quotes": [ "error", "single" ],
     "jsx-quotes": [ "error", "prefer-double" ],
+    "@typescript-eslint/no-unused-vars": "error",
     "react/function-component-definition": [
       2,
       {
