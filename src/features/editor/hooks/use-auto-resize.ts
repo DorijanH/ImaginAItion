@@ -51,7 +51,7 @@ export function useAutoResize(props: UseAutoResizeProps) {
     localWorkspace.clone((cloned: fabric.Rect) => {
       canvas.clipPath = cloned;
       canvas.requestRenderAll();
-    })
+    });
   }, [canvas, container]);
 
   useEffect(() => {
