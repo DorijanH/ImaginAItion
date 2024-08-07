@@ -16,6 +16,7 @@ export type ActiveTool =
   | 'templates';
 
 export type Editor = {
+  changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
   changeFillColor: (value: string) => void;
@@ -26,6 +27,7 @@ export type Editor = {
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
+  getActiveOpacity: () => number;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;

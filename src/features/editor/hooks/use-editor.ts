@@ -45,6 +45,15 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
+   * Changes the opacity.
+   */
+  const changeOpacity = (value: number) => {
+    selectedObjects.forEach((object) => object.set({ opacity: value }));
+
+    canvas.renderAll();
+  };
+
+  /**
    * Brings the object forward in the layering terms.
    */
   const bringForward = () => {
@@ -171,6 +180,20 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Gets the active opacity.
+   */
+  const getActiveOpacity = () => {
+    const defaultOpacity = 1;
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return defaultOpacity;
+    }
+
+    return selectedObject.get('opacity') || defaultOpacity;
+  };
+
+  /**
    * Adds the circle to the canvas.
    */
   const addCircle = () => {
@@ -282,6 +305,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    changeOpacity,
     bringForward,
     sendBackwards,
     changeFillColor,
@@ -292,6 +316,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     getActiveStrokeColor,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
+    getActiveOpacity,
     addCircle,
     addSoftRectangle,
     addRectangle,

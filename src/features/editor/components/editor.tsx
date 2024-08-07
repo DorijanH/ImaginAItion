@@ -12,6 +12,7 @@ import StrokeOptionsSidebar from './stroke-options-sidebar';
 import StrokeColorSidebar from './stroke-color-sidebar';
 import Sidebar from './sidebar';
 import ShapeSidebar from './shape-sidebar';
+import OpacitySidebar from './opacity-sidebar';
 import Navbar from './navbar';
 import Footer from './footer';
 import FillColorSidebar from './fill-color-sidebar';
@@ -93,6 +94,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <StrokeOptionsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <OpacitySidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

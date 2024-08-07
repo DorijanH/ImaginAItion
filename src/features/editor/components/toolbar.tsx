@@ -1,3 +1,4 @@
+import { RxTransparencyGrid } from 'react-icons/rx';
 import { BsBorderWidth } from 'react-icons/bs';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
@@ -47,79 +48,79 @@ export default function Toolbar(props: ToolbarProps) {
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
       <div className="flex h-full items-center justify-center gap-x-2">
-        <Hint
+        <ToolbarButton
           label="Color"
-          side="bottom"
-          sideOffset={5}
+          onClick={() => onChangeActiveTool('fill')}
+          className={cn(activeTool === 'fill' && 'bg-gray-100')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => onChangeActiveTool('fill')}
-            className={cn(activeTool === 'fill' && 'bg-gray-100')}
-          >
-            <div className="size-4 rounded-sm border" style={{ backgroundColor: fillColor }} />
-          </Button>
-        </Hint>
+          <div className="size-4 rounded-sm border" style={{ backgroundColor: fillColor }} />
+        </ToolbarButton>
 
-        <Hint
-          side="bottom"
-          sideOffset={5}
+        <ToolbarButton
           label="Stroke color"
+          onClick={() => onChangeActiveTool('stroke-color')}
+          className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => onChangeActiveTool('stroke-color')}
-            className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
-          >
-            <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
-          </Button>
-        </Hint>
+          <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
+        </ToolbarButton>
 
-        <Hint
-          side="bottom"
-          sideOffset={5}
+        <ToolbarButton
           label="Stroke options"
+          onClick={() => onChangeActiveTool('stroke-width')}
+          className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => onChangeActiveTool('stroke-width')}
-            className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
-          >
-            <BsBorderWidth className="size-4" />
-          </Button>
-        </Hint>
+          <BsBorderWidth className="size-4" />
+        </ToolbarButton>
 
-        <Hint
-          side="bottom"
-          sideOffset={5}
-          label="Bring forward"
-        >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleBringForward}
-          >
-            <ArrowUp className="size-4" />
-          </Button>
-        </Hint>
+        <ToolbarButton label="Bring forward" onClick={handleBringForward}>
+          <ArrowUp className="size-4" />
+        </ToolbarButton>
 
-        <Hint
-          side="bottom"
-          sideOffset={5}
-          label="Send backwards"
+        <ToolbarButton label="Send backwards" onClick={handleSendBackwards}>
+          <ArrowDown className="size-4" />
+        </ToolbarButton>
+
+        <ToolbarButton
+          label="Opacity"
+          onClick={() => onChangeActiveTool('opacity')}
+          className={cn(activeTool === 'opacity' && 'bg-gray-100')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleSendBackwards}
-          >
-            <ArrowDown className="size-4" />
-          </Button>
-        </Hint>
+          <RxTransparencyGrid className="size-4" />
+        </ToolbarButton>
       </div>
     </div>
+  );
+}
+
+type ToolbarButtonProps = {
+  label: string;
+  className?: string;
+  onClick: () => void;
+  children: React.ReactNode;
+};
+
+function ToolbarButton(props: ToolbarButtonProps) {
+  const {
+    label,
+    onClick,
+    children,
+    className
+  } = props;
+
+  return (
+    <Hint
+      side="bottom"
+      label={label}
+      sideOffset={5}
+    >
+      <Button
+        size="icon"
+        variant="ghost"
+        onClick={onClick}
+        className={className}
+      >
+        {children}
+      </Button>
+    </Hint>
   );
 }
