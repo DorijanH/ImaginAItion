@@ -1,9 +1,9 @@
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { BsBorderWidth } from 'react-icons/bs';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import Hint from '@/components/hint';
 
 import { ActiveTool, Editor } from '../types';
@@ -34,6 +34,7 @@ export default function Toolbar(props: ToolbarProps) {
 
   const fillColor = editor?.getActiveFillColor();
   const strokeColor = editor?.getActiveStrokeColor();
+  const fontFamily = editor?.getActiveFontFamily();
 
   /**
    * Handles the bring forward action.
@@ -80,6 +81,22 @@ export default function Toolbar(props: ToolbarProps) {
           </>
         )}
 
+        {isText && (
+          <>
+            <ToolbarButton
+              size="sm"
+              label="Font"
+              onClick={() => onChangeActiveTool('font')}
+              className={cn(activeTool === 'font' && 'bg-gray-100')}
+            >
+              <div className="max-w-[100px] truncate">
+                {fontFamily}
+              </div>
+              <ChevronDown className="ml-2 size-4 shrink-0" />
+            </ToolbarButton>
+          </>
+        )}
+
         <ToolbarButton label="Bring forward" onClick={handleBringForward}>
           <ArrowUp className="size-4" />
         </ToolbarButton>
@@ -104,6 +121,7 @@ type ToolbarButtonProps = {
   label: string;
   className?: string;
   onClick: () => void;
+  size?: ButtonProps['size'];
   children: React.ReactNode;
 };
 
@@ -112,7 +130,8 @@ function ToolbarButton(props: ToolbarButtonProps) {
     label,
     onClick,
     children,
-    className
+    className,
+    size = 'icon'
   } = props;
 
   return (
@@ -122,7 +141,7 @@ function ToolbarButton(props: ToolbarButtonProps) {
       sideOffset={5}
     >
       <Button
-        size="icon"
+        size={size}
         variant="ghost"
         onClick={onClick}
         className={className}

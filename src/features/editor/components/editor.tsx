@@ -16,6 +16,7 @@ import ShapeSidebar from './shape-sidebar';
 import OpacitySidebar from './opacity-sidebar';
 import Navbar from './navbar';
 import Footer from './footer';
+import FontSidebar from './font-sidebar';
 import FillColorSidebar from './fill-color-sidebar';
 
 export default function Editor() {
@@ -105,6 +106,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <FontSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

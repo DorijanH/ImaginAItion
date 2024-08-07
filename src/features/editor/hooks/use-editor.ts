@@ -8,6 +8,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  FONT_FAMILY,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -30,6 +31,8 @@ type BuildEditorProps = {
   setStrokeWidth: Dispatch<SetStateAction<number>>;
   strokeDashArray: number[];
   setStrokeDashArray: Dispatch<SetStateAction<number[]>>;
+  fontFamily: string;
+  setFontFamily: Dispatch<SetStateAction<string>>;
 };
 
 const buildEditor = (props: BuildEditorProps): Editor => {
@@ -43,7 +46,9 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     strokeWidth,
     setStrokeWidth,
     strokeDashArray,
-    setStrokeDashArray
+    setStrokeDashArray,
+    fontFamily,
+    setFontFamily
   } = props;
 
   /**
@@ -74,6 +79,22 @@ const buildEditor = (props: BuildEditorProps): Editor => {
 
     const workspace = getWorkspace(canvas);
     workspace?.sendToBack();
+  };
+
+  /**
+   * Changes the font family.
+   */
+  const changeFontFamily = (value: string) => {
+    setFontFamily(value);
+
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ fontFamily: value });
+      }
+    });
+
+    canvas.renderAll();
   };
 
   /**
@@ -124,6 +145,20 @@ const buildEditor = (props: BuildEditorProps): Editor => {
 
     selectedObjects.forEach((object) => object.set({ strokeDashArray: value }));
     canvas.renderAll();
+  };
+
+  /**
+   * Gets the active font family.
+   */
+  const getActiveFontFamily = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return fontFamily;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('fontFamily') || fontFamily;
   };
 
   /**
@@ -323,10 +358,12 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     changeOpacity,
     bringForward,
     sendBackwards,
+    changeFontFamily,
     changeFillColor,
     changeStrokeColor,
     changeStrokeWidth,
     changeStrokeDashArray,
+    getActiveFontFamily,
     getActiveFillColor,
     getActiveStrokeColor,
     getActiveStrokeWidth,
@@ -357,9 +394,10 @@ export function useEditor(props: UseEditorProps) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
 
-  const [fillColor, setFillColor] = useState(FILL_COLOR);
-  const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
-  const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+  const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
+  const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
+  const [strokeColor, setStrokeColor] = useState<string>(STROKE_COLOR);
+  const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
   useAutoResize({ canvas, container });
@@ -377,12 +415,14 @@ export function useEditor(props: UseEditorProps) {
         strokeWidth,
         setStrokeWidth,
         strokeDashArray,
-        setStrokeDashArray
+        setStrokeDashArray,
+        fontFamily,
+        setFontFamily
       });
     }
 
     return undefined;
-  }, [canvas, fillColor, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
+  }, [canvas, fillColor, fontFamily, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
     fabric.Object.prototype.set({
