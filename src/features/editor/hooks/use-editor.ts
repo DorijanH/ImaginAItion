@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
 import { fabric } from 'fabric';
 
 import { Editor } from '../types';
-import { addToCanvas, isTextType } from '../helpers';
+import { addToCanvas, getWorkspace, isTextType } from '../helpers';
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -45,12 +45,33 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
+   * Brings the object forward in the layering terms.
+   */
+  const bringForward = () => {
+    selectedObjects.forEach((object) => canvas.bringForward(object));
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Sends the object backwards in the layering terms.
+   */
+  const sendBackwards = () => {
+    selectedObjects.forEach((object) => canvas.sendBackwards(object));
+
+    canvas.renderAll();
+
+    const workspace = getWorkspace(canvas);
+    workspace?.sendToBack();
+  };
+
+  /**
    * Changes the fill color.
    */
   const changeFillColor = (value: string) => {
     setFillColor(value);
 
-    canvas.getActiveObjects().forEach((object) => object.set({ fill: value }));
+    selectedObjects.forEach((object) => object.set({ fill: value }));
     canvas.renderAll();
   };
 
@@ -60,7 +81,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   const changeStrokeColor = (value: string) => {
     setStrokeColor(value);
 
-    canvas.getActiveObjects().forEach((object) => {
+    selectedObjects.forEach((object) => {
       // Text types don't have stroke
       if (isTextType(object.type)) {
         object.set({ fill: value });
@@ -80,7 +101,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   const changeStrokeWidth = (value: number) => {
     setStrokeWidth(value);
 
-    canvas.getActiveObjects().forEach((object) => object.set({ strokeWidth: value }));
+    selectedObjects.forEach((object) => object.set({ strokeWidth: value }));
     canvas.renderAll();
   };
 
@@ -90,7 +111,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   const changeStrokeDashArray = (value: number[]) => {
     setStrokeDashArray(value);
 
-    canvas.getActiveObjects().forEach((object) => object.set({ strokeDashArray: value }));
+    selectedObjects.forEach((object) => object.set({ strokeDashArray: value }));
     canvas.renderAll();
   };
 
@@ -261,6 +282,8 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    bringForward,
+    sendBackwards,
     changeFillColor,
     changeStrokeColor,
     changeStrokeWidth,

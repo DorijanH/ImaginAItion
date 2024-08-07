@@ -1,4 +1,5 @@
 import { BsBorderWidth } from 'react-icons/bs';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,20 @@ export default function Toolbar(props: ToolbarProps) {
 
   const fillColor = editor?.getActiveFillColor();
   const strokeColor = editor?.getActiveStrokeColor();
+
+  /**
+   * Handles the bring forward action.
+   */
+  const handleBringForward = () => {
+    editor?.bringForward();
+  };
+
+  /**
+   * Handles the send backwards action.
+   */
+  const handleSendBackwards = () => {
+    editor?.sendBackwards();
+  };
 
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
@@ -74,6 +89,34 @@ export default function Toolbar(props: ToolbarProps) {
             className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
           >
             <BsBorderWidth className="size-4" />
+          </Button>
+        </Hint>
+
+        <Hint
+          side="bottom"
+          sideOffset={5}
+          label="Bring forward"
+        >
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleBringForward}
+          >
+            <ArrowUp className="size-4" />
+          </Button>
+        </Hint>
+
+        <Hint
+          side="bottom"
+          sideOffset={5}
+          label="Send backwards"
+        >
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleSendBackwards}
+          >
+            <ArrowDown className="size-4" />
           </Button>
         </Hint>
       </div>
