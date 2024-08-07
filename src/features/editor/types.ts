@@ -1,3 +1,5 @@
+import { ITextboxOptions } from 'fabric/fabric-impl';
+
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -28,6 +30,7 @@ export type Editor = {
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveOpacity: () => number;
+  addText: (value: string, options?: ITextboxOptions) => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;

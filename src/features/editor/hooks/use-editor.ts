@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
+import { ITextOptions } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
 
 import { Editor } from '../types';
@@ -11,6 +12,7 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
 } from '../constants';
@@ -194,6 +196,19 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Adds the text to the canvas.
+   */
+  const addText = (value: string, options?: ITextOptions) => {
+    const text = new fabric.Textbox(value, {
+      ...TEXT_OPTIONS,
+      fill: fillColor,
+      ...options
+    });
+
+    addToCanvas(canvas, text);
+  };
+
+  /**
    * Adds the circle to the canvas.
    */
   const addCircle = () => {
@@ -317,6 +332,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
     getActiveOpacity,
+    addText,
     addCircle,
     addSoftRectangle,
     addRectangle,

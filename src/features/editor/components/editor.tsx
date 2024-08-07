@@ -8,6 +8,7 @@ import { useEditor } from '@/features/editor/hooks/use-editor';
 import { ActiveTool } from '../types';
 import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
+import TextSidebar from './text-sidebar';
 import StrokeOptionsSidebar from './stroke-options-sidebar';
 import StrokeColorSidebar from './stroke-color-sidebar';
 import Sidebar from './sidebar';
@@ -99,6 +100,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <TextSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

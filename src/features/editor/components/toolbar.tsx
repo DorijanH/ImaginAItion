@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Hint from '@/components/hint';
 
 import { ActiveTool, Editor } from '../types';
+import { isTextType } from '../helpers';
 
 type ToolbarProps = {
   editor: Editor | undefined;
@@ -27,6 +28,9 @@ export default function Toolbar(props: ToolbarProps) {
   if (!isAnySelected) {
     return <div className="z-[49] flex h-[56px] w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2" />;
   }
+
+  const selectedObjectType = editor?.selectedObjects[0]?.type;
+  const isText = isTextType(selectedObjectType);
 
   const fillColor = editor?.getActiveFillColor();
   const strokeColor = editor?.getActiveStrokeColor();
@@ -56,21 +60,25 @@ export default function Toolbar(props: ToolbarProps) {
           <div className="size-4 rounded-sm border" style={{ backgroundColor: fillColor }} />
         </ToolbarButton>
 
-        <ToolbarButton
-          label="Stroke color"
-          onClick={() => onChangeActiveTool('stroke-color')}
-          className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
-        >
-          <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
-        </ToolbarButton>
+        {!isText && (
+          <>
+            <ToolbarButton
+              label="Stroke color"
+              onClick={() => onChangeActiveTool('stroke-color')}
+              className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
+            >
+              <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
+            </ToolbarButton>
 
-        <ToolbarButton
-          label="Stroke options"
-          onClick={() => onChangeActiveTool('stroke-width')}
-          className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
-        >
-          <BsBorderWidth className="size-4" />
-        </ToolbarButton>
+            <ToolbarButton
+              label="Stroke options"
+              onClick={() => onChangeActiveTool('stroke-width')}
+              className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+            >
+              <BsBorderWidth className="size-4" />
+            </ToolbarButton>
+          </>
+        )}
 
         <ToolbarButton label="Bring forward" onClick={handleBringForward}>
           <ArrowUp className="size-4" />
