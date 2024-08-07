@@ -1,6 +1,7 @@
-import { ChromePicker, CirclePicker, ColorResult } from "react-color";
-import { COLORS } from "../constants";
-import { rgbaObjectToString } from "../helpers";
+import { ChromePicker, CirclePicker, ColorResult } from 'react-color';
+
+import { rgbaObjectToString } from '../helpers';
+import { COLORS } from '../constants';
 
 type ColorPickerProps = {
   value: string;
@@ -27,7 +28,7 @@ export default function ColorPicker(props: ColorPickerProps) {
       <ChromePicker
         color={value}
         onChange={handleChange}
-        className="border rounded-lg"
+        className="rounded-lg border"
       />
 
       <CirclePicker

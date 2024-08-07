@@ -2,10 +2,10 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { ActiveTool, Editor } from '../types';
+import { FILL_COLOR } from '../constants';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 import ColorPicker from './color-picker';
-import { FILL_COLOR } from '../constants';
 
 type FillColorSidebarProps = {
   editor: Editor | undefined;

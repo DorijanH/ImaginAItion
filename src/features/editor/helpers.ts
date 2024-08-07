@@ -1,4 +1,5 @@
 import { RGBColor } from 'react-color';
+
 import { WORKSPACE_NAME } from './constants';
 
 export function getWorkspace(canvas: fabric.Canvas) {
@@ -30,7 +31,7 @@ export function isTextType(type: string | undefined) {
 
 export function rgbaObjectToString(rgba: RGBColor | 'transparent') {
   if (rgba === 'transparent') {
-    return `rgba(0, 0, 0, 0)`;
+    return 'rgba(0, 0, 0, 0)';
   }
 
   const alpha = rgba.a ?? 1;
