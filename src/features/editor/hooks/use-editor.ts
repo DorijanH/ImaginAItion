@@ -96,6 +96,19 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Gets the active stroke color.
+   */
+  const getActiveStrokeColor = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return strokeColor;
+    }
+
+    return selectedObject.get('stroke') || strokeColor;
+  };
+
+  /**
    * Adds the circle to the canvas.
    */
   const addCircle = () => {
@@ -205,6 +218,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     changeStrokeColor,
     changeStrokeWidth,
     getActiveFillColor,
+    getActiveStrokeColor,
     addCircle,
     addSoftRectangle,
     addRectangle,
@@ -212,7 +226,6 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     addInverseTriangle,
     addDiamond,
     canvas,
-    strokeColor,
     strokeWidth,
     selectedObjects
   };
