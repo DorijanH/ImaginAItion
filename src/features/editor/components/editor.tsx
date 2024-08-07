@@ -8,6 +8,7 @@ import { useEditor } from '@/features/editor/hooks/use-editor';
 import { ActiveTool } from '../types';
 import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
+import StrokeOptionsSidebar from './stroke-options-sidebar';
 import StrokeColorSidebar from './stroke-color-sidebar';
 import Sidebar from './sidebar';
 import ShapeSidebar from './shape-sidebar';
@@ -87,6 +88,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <StrokeOptionsSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

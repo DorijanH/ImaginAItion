@@ -19,8 +19,11 @@ export type Editor = {
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
+  changeStrokeDashArray: (value: number[]) => void;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
+  getActiveStrokeWidth: () => number;
+  getActiveStrokeDashArray: () => number[];
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -28,6 +31,5 @@ export type Editor = {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
-  strokeWidth: number;
   selectedObjects: fabric.Object[];
 }

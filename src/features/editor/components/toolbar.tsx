@@ -1,3 +1,5 @@
+import { BsBorderWidth } from 'react-icons/bs';
+
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Hint from '@/components/hint';
@@ -57,6 +59,21 @@ export default function Toolbar(props: ToolbarProps) {
             className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
           >
             <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
+          </Button>
+        </Hint>
+
+        <Hint
+          side="bottom"
+          sideOffset={5}
+          label="Stroke options"
+        >
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => onChangeActiveTool('stroke-width')}
+            className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+          >
+            <BsBorderWidth className="size-4" />
           </Button>
         </Hint>
       </div>

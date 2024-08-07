@@ -85,7 +85,7 @@ type ShapeToolProps = {
   iconClassName?: string;
 };
 
-export function ShapeTool(props: ShapeToolProps) {
+function ShapeTool(props: ShapeToolProps) {
   const {
     onClick,
     icon: Icon,

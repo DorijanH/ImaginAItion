@@ -74,7 +74,7 @@ type SidebarItemProps = {
   onClick: () => void;
 };
 
-export function SidebarItem(props: SidebarItemProps) {
+function SidebarItem(props: SidebarItemProps) {
   const {
     icon: Icon,
     label,
