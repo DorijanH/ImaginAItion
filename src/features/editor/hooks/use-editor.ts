@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { fabric } from 'fabric';
 
-import { BuildEditorProps, Editor } from '../types';
+import { Editor } from '../types';
 import { addToCanvas, isTextType } from '../helpers';
 import {
   CIRCLE_OPTIONS,
@@ -16,9 +16,21 @@ import {
 import { useCanvasEvents } from './use-canvas-events';
 import { useAutoResize } from './use-auto-resize';
 
+type BuildEditorProps = {
+  canvas: fabric.Canvas;
+  selectedObjects: fabric.Object[];
+  fillColor: string;
+  setFillColor: Dispatch<SetStateAction<string>>;
+  strokeColor: string;
+  setStrokeColor: Dispatch<SetStateAction<string>>;
+  strokeWidth: number;
+  setStrokeWidth: Dispatch<SetStateAction<number>>;
+};
+
 const buildEditor = (props: BuildEditorProps): Editor => {
   const {
     canvas,
+    selectedObjects,
     fillColor,
     setFillColor,
     strokeColor,
@@ -65,6 +77,22 @@ const buildEditor = (props: BuildEditorProps): Editor => {
 
     canvas.getActiveObjects().forEach((object) => object.set({ strokeWidth: value }));
     canvas.renderAll();
+  };
+
+  /**
+   * Gets the active fill color.
+   */
+  const getActiveFillColor = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return fillColor;
+    }
+
+    const value = selectedObject.get('fill') || fillColor;
+
+    // Currently gradiants and patterns are not used
+    return value as string;
   };
 
   /**
@@ -176,6 +204,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     changeFillColor,
     changeStrokeColor,
     changeStrokeWidth,
+    getActiveFillColor,
     addCircle,
     addSoftRectangle,
     addRectangle,
@@ -183,28 +212,37 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     addInverseTriangle,
     addDiamond,
     canvas,
-    fillColor,
     strokeColor,
-    strokeWidth
+    strokeWidth,
+    selectedObjects
   };
 };
 
-export function useEditor() {
+type UseEditorProps = {
+  clearSelectionCallback?: () => void;
+};
+
+export function useEditor(props: UseEditorProps) {
+  const {
+    clearSelectionCallback
+  } = props;
+
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [, setSelectedObjects] = useState<fabric.Object[]>([]);
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
 
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
 
   useAutoResize({ canvas, container });
-  useCanvasEvents({ canvas, setSelectedObjects });
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
         canvas,
+        selectedObjects,
         fillColor,
         setFillColor,
         strokeColor,
@@ -215,7 +253,7 @@ export function useEditor() {
     }
 
     return undefined;
-  }, [canvas, fillColor, strokeColor, strokeWidth]);
+  }, [canvas, fillColor, selectedObjects, strokeColor, strokeWidth]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
     fabric.Object.prototype.set({

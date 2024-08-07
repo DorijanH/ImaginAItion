@@ -1,5 +1,7 @@
 import * as material from 'material-colors';
 
+import { ActiveTool } from './types';
+
 export const WORKSPACE_NAME = 'workspace';
 
 export const FILL_COLOR = 'rgba(0, 0, 0, 1)';
@@ -68,4 +70,14 @@ export const COLORS = [
   material.brown[500],
   material.blueGrey[500],
   'transparent'
+];
+
+export const SELECTION_DEPENDENT_TOOLS: ActiveTool[] = [
+  'fill',
+  'font',
+  'filter',
+  'opacity',
+  'remove-bg',
+  'stroke-color',
+  'stroke-width'
 ];

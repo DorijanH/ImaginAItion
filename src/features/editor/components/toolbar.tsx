@@ -17,7 +17,14 @@ export default function Toolbar(props: ToolbarProps) {
     onChangeActiveTool
   } = props;
 
-  const fillColor = editor?.fillColor;
+  const isAnySelected = !!editor?.selectedObjects.length;
+
+  // If there isn't anything selected, show the empty toolbar
+  if (!isAnySelected) {
+    return <div className="z-[49] flex h-[56px] w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2" />;
+  }
+
+  const fillColor = editor?.getActiveFillColor();
 
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2">

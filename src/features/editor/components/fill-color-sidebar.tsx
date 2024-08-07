@@ -34,7 +34,7 @@ export default function FillColorSidebar(props: FillColorSidebarProps) {
     editor?.changeFillColor(value);
   };
 
-  const value = editor?.fillColor ?? FILL_COLOR;
+  const value = editor?.getActiveFillColor() ?? FILL_COLOR;
 
   return (
     <aside

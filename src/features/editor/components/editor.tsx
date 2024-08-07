@@ -6,6 +6,7 @@ import { fabric } from 'fabric';
 import { useEditor } from '@/features/editor/hooks/use-editor';
 
 import { ActiveTool } from '../types';
+import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
 import Sidebar from './sidebar';
 import ShapeSidebar from './shape-sidebar';
@@ -16,7 +17,18 @@ import FillColorSidebar from './fill-color-sidebar';
 export default function Editor() {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
 
-  const { init, editor } = useEditor();
+  /**
+   * Handles the clear selection event.
+   */
+  const handleClearSelection = useCallback(() => {
+    if (SELECTION_DEPENDENT_TOOLS.includes(activeTool)) {
+      setActiveTool('select');
+    }
+  }, [activeTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: handleClearSelection
+  });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

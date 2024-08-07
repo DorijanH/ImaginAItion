@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -17,20 +15,11 @@ export type ActiveTool =
   | 'remove-bg'
   | 'templates';
 
-export type BuildEditorProps = {
-  canvas: fabric.Canvas;
-  fillColor: string;
-  setFillColor: Dispatch<SetStateAction<string>>;
-  strokeColor: string;
-  setStrokeColor: Dispatch<SetStateAction<string>>;
-  strokeWidth: number;
-  setStrokeWidth: Dispatch<SetStateAction<number>>;
-};
-
 export type Editor = {
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
+  getActiveFillColor: () => string;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -38,7 +27,7 @@ export type Editor = {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
-  fillColor: string;
   strokeColor: string;
   strokeWidth: number;
+  selectedObjects: fabric.Object[];
 }
