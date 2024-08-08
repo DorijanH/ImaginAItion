@@ -10,7 +10,18 @@ import Hint from '@/components/hint';
 
 import { ActiveTool, Editor } from '../types';
 import { isTextType } from '../helpers';
-import { FILL_COLOR, FONT_FAMILY, FONT_LINETHROUGH, FONT_STYLE, FONT_UNDERLINE, FONT_WEIGHT, STROKE_COLOR, TEXT_ALIGN } from '../constants';
+import {
+  FILL_COLOR,
+  FONT_FAMILY,
+  FONT_LINETHROUGH,
+  FONT_SIZE,
+  FONT_STYLE,
+  FONT_UNDERLINE,
+  FONT_WEIGHT,
+  STROKE_COLOR,
+  TEXT_ALIGN
+} from '../constants';
+import FontSizeInput from './font-size-input';
 
 type ToolbarProps = {
   editor: Editor | undefined;
@@ -25,24 +36,16 @@ export default function Toolbar(props: ToolbarProps) {
     onChangeActiveTool
   } = props;
 
-  const initialFillColor = editor?.getActiveFillColor() ?? FILL_COLOR;
-  const initialStrokeColor = editor?.getActiveStrokeColor() ?? STROKE_COLOR;
-  const initialFontFamily = editor?.getActiveFontFamily() ?? FONT_FAMILY;
-  const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
-  const initialFontStyle = editor?.getActiveFontStyle() ?? FONT_STYLE;
-  const initialFontLinethrough = editor?.getActiveFontLinethrough() ?? FONT_LINETHROUGH;
-  const initialFontUnderline = editor?.getActiveFontUnderline() ?? FONT_UNDERLINE;
-  const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
-
   const [properties, setProperties] = useState({
-    fillColor: initialFillColor,
-    strokeColor: initialStrokeColor,
-    fontFamily: initialFontFamily,
-    fontWeight: initialFontWeight,
-    fontStyle: initialFontStyle,
-    fontLinethrough: initialFontLinethrough,
-    fontUnderline: initialFontUnderline,
-    textAlign: initialTextAlign
+    fillColor: editor?.getActiveFillColor() ?? FILL_COLOR,
+    strokeColor: editor?.getActiveStrokeColor() ?? STROKE_COLOR,
+    fontFamily: editor?.getActiveFontFamily() ?? FONT_FAMILY,
+    fontWeight: editor?.getActiveFontWeight() ?? FONT_WEIGHT,
+    fontStyle: editor?.getActiveFontStyle() ?? FONT_STYLE,
+    fontLinethrough: editor?.getActiveFontLinethrough() ?? FONT_LINETHROUGH,
+    fontUnderline: editor?.getActiveFontUnderline() ?? FONT_UNDERLINE,
+    textAlign: editor?.getActiveTextAlign() ?? TEXT_ALIGN,
+    fontSize: editor?.getActiveFontSize() ?? FONT_SIZE
   });
 
   const isAnySelected = !!editor?.selectedObjects.length;
@@ -134,6 +137,18 @@ export default function Toolbar(props: ToolbarProps) {
     }));
   };
 
+  /**
+   * Handles the font size change action.
+   */
+  const handleFontSizeChange = (value: number) => {
+    editor?.changeFontSize(value);
+
+    setProperties((prev) => ({
+      ...prev,
+      fontSize: value
+    }));
+  };
+
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
       <div className="flex h-full items-center justify-center gap-x-2">
@@ -214,6 +229,11 @@ export default function Toolbar(props: ToolbarProps) {
             >
               <AlignRight className="size-4" />
             </ToolbarButton>
+
+            <FontSizeInput
+              value={properties.fontSize}
+              onChange={handleFontSizeChange}
+            />
           </>
         ) : (
           <>
