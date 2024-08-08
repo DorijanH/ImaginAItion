@@ -2,7 +2,7 @@ import { RxTransparencyGrid } from 'react-icons/rx';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { BsBorderWidth } from 'react-icons/bs';
 import { useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Trash } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button, ButtonProps } from '@/components/ui/button';
@@ -60,6 +60,13 @@ export default function Toolbar(props: ToolbarProps) {
 
   const isBold = properties.fontWeight > 500;
   const isItalic = properties.fontStyle === 'italic';
+
+  /**
+   * Handles the delete action.
+   */
+  const handleDelete = () => {
+    editor?.deleteSelected();
+  };
 
   /**
    * Handles the bring forward action.
@@ -269,6 +276,10 @@ export default function Toolbar(props: ToolbarProps) {
           className={cn(activeTool === 'opacity' && 'bg-gray-100')}
         >
           <RxTransparencyGrid className="size-4" />
+        </ToolbarButton>
+
+        <ToolbarButton label="Delete" onClick={handleDelete}>
+          <Trash className="size-4" />
         </ToolbarButton>
       </div>
     </div>

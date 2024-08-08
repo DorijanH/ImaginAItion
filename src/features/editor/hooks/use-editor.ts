@@ -58,6 +58,16 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
+   * Deletes the currently selected object.
+   */
+  const deleteSelected = () => {
+    selectedObjects.forEach((object) => canvas.remove(object));
+
+    canvas.discardActiveObject();
+    canvas.renderAll();
+  };
+
+  /**
    * Brings the object forward in the layering terms.
    */
   const bringForward = () => {
@@ -529,6 +539,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    deleteSelected,
     bringForward,
     sendBackwards,
     changeOpacity,

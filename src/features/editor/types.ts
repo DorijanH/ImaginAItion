@@ -18,6 +18,7 @@ export type ActiveTool =
   | 'templates';
 
 export type Editor = {
+  deleteSelected: () => void;
   bringForward: () => void;
   sendBackwards: () => void;
   changeOpacity: (value: number) => void;
