@@ -1,6 +1,8 @@
 import { RxTransparencyGrid } from 'react-icons/rx';
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { BsBorderWidth } from 'react-icons/bs';
-import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button, ButtonProps } from '@/components/ui/button';
@@ -8,6 +10,7 @@ import Hint from '@/components/hint';
 
 import { ActiveTool, Editor } from '../types';
 import { isTextType } from '../helpers';
+import { FILL_COLOR, FONT_FAMILY, FONT_LINETHROUGH, FONT_STYLE, FONT_UNDERLINE, FONT_WEIGHT, STROKE_COLOR, TEXT_ALIGN } from '../constants';
 
 type ToolbarProps = {
   editor: Editor | undefined;
@@ -22,6 +25,26 @@ export default function Toolbar(props: ToolbarProps) {
     onChangeActiveTool
   } = props;
 
+  const initialFillColor = editor?.getActiveFillColor() ?? FILL_COLOR;
+  const initialStrokeColor = editor?.getActiveStrokeColor() ?? STROKE_COLOR;
+  const initialFontFamily = editor?.getActiveFontFamily() ?? FONT_FAMILY;
+  const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
+  const initialFontStyle = editor?.getActiveFontStyle() ?? FONT_STYLE;
+  const initialFontLinethrough = editor?.getActiveFontLinethrough() ?? FONT_LINETHROUGH;
+  const initialFontUnderline = editor?.getActiveFontUnderline() ?? FONT_UNDERLINE;
+  const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
+
+  const [properties, setProperties] = useState({
+    fillColor: initialFillColor,
+    strokeColor: initialStrokeColor,
+    fontFamily: initialFontFamily,
+    fontWeight: initialFontWeight,
+    fontStyle: initialFontStyle,
+    fontLinethrough: initialFontLinethrough,
+    fontUnderline: initialFontUnderline,
+    textAlign: initialTextAlign
+  });
+
   const isAnySelected = !!editor?.selectedObjects.length;
 
   // If there isn't anything selected, show the empty toolbar
@@ -29,12 +52,11 @@ export default function Toolbar(props: ToolbarProps) {
     return <div className="z-[49] flex h-[56px] w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2" />;
   }
 
-  const selectedObjectType = editor?.selectedObjects[0]?.type;
-  const isText = isTextType(selectedObjectType);
+  const selectedObject = editor?.selectedObjects[0];
+  const isText = isTextType(selectedObject?.type);
 
-  const fillColor = editor?.getActiveFillColor();
-  const strokeColor = editor?.getActiveStrokeColor();
-  const fontFamily = editor?.getActiveFontFamily();
+  const isBold = properties.fontWeight > 500;
+  const isItalic = properties.fontStyle === 'italic';
 
   /**
    * Handles the bring forward action.
@@ -50,6 +72,68 @@ export default function Toolbar(props: ToolbarProps) {
     editor?.sendBackwards();
   };
 
+  /**
+   * Handles the toggle bold action.
+   */
+  const handleToggleBold = () => {
+    const newValue = isBold ? 500 : 700;
+
+    editor?.changeFontWeight(newValue);
+    setProperties((prev) => ({
+      ...prev,
+      fontWeight: newValue
+    }));
+  };
+
+  /**
+   * Handles the toggle italic action.
+   */
+  const handleToggleItalic = () => {
+    const newValue = isItalic ? 'normal' : 'italic';
+
+    editor?.changeFontStyle(newValue);
+    setProperties((prev) => ({
+      ...prev,
+      fontStyle: newValue
+    }));
+  };
+
+  /**
+   * Handles the toggle linethrough action.
+   */
+  const handleToggleLinethrough = () => {
+    editor?.changeFontLinethrough(!properties.fontLinethrough);
+
+    setProperties((prev) => ({
+      ...prev,
+      fontLinethrough: !prev.fontLinethrough
+    }));
+  };
+
+  /**
+   * Handles the toggle underline action.
+   */
+  const handleToggleUnderline = () => {
+    editor?.changeFontUnderline(!properties.fontUnderline);
+
+    setProperties((prev) => ({
+      ...prev,
+      fontUnderline: !prev.fontUnderline
+    }));
+  };
+
+  /**
+   * Handles the text align change action.
+   */
+  const handleTextAlignChange = (value: 'left' | 'center' | 'right') => {
+    editor?.changeTextAlign(value);
+
+    setProperties((prev) => ({
+      ...prev,
+      textAlign: value
+    }));
+  };
+
   return (
     <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
       <div className="flex h-full items-center justify-center gap-x-2">
@@ -58,30 +142,10 @@ export default function Toolbar(props: ToolbarProps) {
           onClick={() => onChangeActiveTool('fill')}
           className={cn(activeTool === 'fill' && 'bg-gray-100')}
         >
-          <div className="size-4 rounded-sm border" style={{ backgroundColor: fillColor }} />
+          <div className="size-4 rounded-sm border" style={{ backgroundColor: properties.fillColor }} />
         </ToolbarButton>
 
-        {!isText && (
-          <>
-            <ToolbarButton
-              label="Stroke color"
-              onClick={() => onChangeActiveTool('stroke-color')}
-              className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
-            >
-              <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: strokeColor }} />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Stroke options"
-              onClick={() => onChangeActiveTool('stroke-width')}
-              className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
-            >
-              <BsBorderWidth className="size-4" />
-            </ToolbarButton>
-          </>
-        )}
-
-        {isText && (
+        {isText ? (
           <>
             <ToolbarButton
               size="sm"
@@ -90,9 +154,83 @@ export default function Toolbar(props: ToolbarProps) {
               className={cn(activeTool === 'font' && 'bg-gray-100')}
             >
               <div className="max-w-[100px] truncate">
-                {fontFamily}
+                {properties.fontFamily}
               </div>
               <ChevronDown className="ml-2 size-4 shrink-0" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Bold"
+              onClick={handleToggleBold}
+              className={cn(isBold && 'bg-gray-100')}
+            >
+              <FaBold className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Italic"
+              onClick={handleToggleItalic}
+              className={cn(isItalic && 'bg-gray-100')}
+            >
+              <FaItalic className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Underline"
+              onClick={handleToggleUnderline}
+              className={cn(properties.fontUnderline && 'bg-gray-100')}
+            >
+              <FaUnderline className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Strike"
+              onClick={handleToggleLinethrough}
+              className={cn(properties.fontLinethrough && 'bg-gray-100')}
+            >
+              <FaStrikethrough className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Align left"
+              onClick={() => handleTextAlignChange('left')}
+              className={cn(properties.textAlign === 'left' && 'bg-gray-100')}
+            >
+              <AlignLeft className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Align center"
+              onClick={() => handleTextAlignChange('center')}
+              className={cn(properties.textAlign === 'center' && 'bg-gray-100')}
+            >
+              <AlignCenter className="size-4" />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Align right"
+              onClick={() => handleTextAlignChange('right')}
+              className={cn(properties.textAlign === 'right' && 'bg-gray-100')}
+            >
+              <AlignRight className="size-4" />
+            </ToolbarButton>
+          </>
+        ) : (
+          <>
+            <ToolbarButton
+              label="Stroke color"
+              onClick={() => onChangeActiveTool('stroke-color')}
+              className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
+            >
+              <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: properties.strokeColor }} />
+            </ToolbarButton>
+
+            <ToolbarButton
+              label="Stroke options"
+              onClick={() => onChangeActiveTool('stroke-width')}
+              className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+            >
+              <BsBorderWidth className="size-4" />
             </ToolbarButton>
           </>
         )}

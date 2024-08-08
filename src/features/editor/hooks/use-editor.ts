@@ -9,10 +9,15 @@ import {
   DIAMOND_OPTIONS,
   FILL_COLOR,
   FONT_FAMILY,
+  FONT_LINETHROUGH,
+  FONT_STYLE,
+  FONT_UNDERLINE,
+  FONT_WEIGHT,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_ALIGN,
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
@@ -52,15 +57,6 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
-   * Changes the opacity.
-   */
-  const changeOpacity = (value: number) => {
-    selectedObjects.forEach((object) => object.set({ opacity: value }));
-
-    canvas.renderAll();
-  };
-
-  /**
    * Brings the object forward in the layering terms.
    */
   const bringForward = () => {
@@ -82,6 +78,169 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Changes the opacity.
+   */
+  const changeOpacity = (value: number) => {
+    selectedObjects.forEach((object) => object.set({ opacity: value }));
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets the active opacity.
+   */
+  const getActiveOpacity = () => {
+    const defaultOpacity = 1;
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return defaultOpacity;
+    }
+
+    return selectedObject.get('opacity') || defaultOpacity;
+  };
+
+  /**
+   * Changes the font style.
+   */
+  const changeFontStyle = (value: string) => {
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ fontStyle: value });
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets the active font style.
+   */
+  const getActiveFontStyle = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return FONT_STYLE;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('fontStyle') || FONT_STYLE;
+  };
+
+  /**
+   * Changes the font linethrough.
+   */
+  const changeFontLinethrough = (value: boolean) => {
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ linethrough: value });
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets is the font linethrough active.
+   */
+  const getActiveFontLinethrough = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return FONT_LINETHROUGH;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('linethrough') || FONT_LINETHROUGH;
+  };
+
+  /**
+   * Changes the font underline.
+   */
+  const changeFontUnderline = (value: boolean) => {
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ underline: value });
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets is the font underline active.
+   */
+  const getActiveFontUnderline = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return FONT_UNDERLINE;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('underline') || FONT_UNDERLINE;
+  };
+
+  /**
+   * Changes the text align.
+   */
+  const changeTextAlign = (value: string) => {
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ textAlign: value });
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets the active text align.
+   */
+  const getActiveTextAlign = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return TEXT_ALIGN;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('textAlign') || TEXT_ALIGN;
+  };
+
+  /**
+   * Changes the font weight.
+   */
+  const changeFontWeight = (value: number) => {
+    selectedObjects.forEach((object) => {
+      if (isTextType(object.type)) {
+        // @ts-ignore
+        object.set({ fontWeight: value });
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  /**
+   * Gets the active font weight.
+   */
+  const getActiveFontWeight = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return FONT_WEIGHT;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('fontWeight') || FONT_WEIGHT;
+  };
+
+  /**
    * Changes the font family.
    */
   const changeFontFamily = (value: string) => {
@@ -98,6 +257,20 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Gets the active font family.
+   */
+  const getActiveFontFamily = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return fontFamily;
+    }
+
+    // @ts-ignore
+    return selectedObject.get('fontFamily') || fontFamily;
+  };
+
+  /**
    * Changes the fill color.
    */
   const changeFillColor = (value: string) => {
@@ -105,6 +278,22 @@ const buildEditor = (props: BuildEditorProps): Editor => {
 
     selectedObjects.forEach((object) => object.set({ fill: value }));
     canvas.renderAll();
+  };
+
+  /**
+   * Gets the active fill color.
+   */
+  const getActiveFillColor = () => {
+    const selectedObject = selectedObjects[0];
+
+    if (!selectedObject) {
+      return fillColor;
+    }
+
+    const value = selectedObject.get('fill') || fillColor;
+
+    // Currently gradiants and patterns are not used
+    return value as string;
   };
 
   /**
@@ -128,56 +317,6 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
-   * Changes the stroke width.
-   */
-  const changeStrokeWidth = (value: number) => {
-    setStrokeWidth(value);
-
-    selectedObjects.forEach((object) => object.set({ strokeWidth: value }));
-    canvas.renderAll();
-  };
-
-  /**
-   * Changes the stroke dash array.
-   */
-  const changeStrokeDashArray = (value: number[]) => {
-    setStrokeDashArray(value);
-
-    selectedObjects.forEach((object) => object.set({ strokeDashArray: value }));
-    canvas.renderAll();
-  };
-
-  /**
-   * Gets the active font family.
-   */
-  const getActiveFontFamily = () => {
-    const selectedObject = selectedObjects[0];
-
-    if (!selectedObject) {
-      return fontFamily;
-    }
-
-    // @ts-ignore
-    return selectedObject.get('fontFamily') || fontFamily;
-  };
-
-  /**
-   * Gets the active fill color.
-   */
-  const getActiveFillColor = () => {
-    const selectedObject = selectedObjects[0];
-
-    if (!selectedObject) {
-      return fillColor;
-    }
-
-    const value = selectedObject.get('fill') || fillColor;
-
-    // Currently gradiants and patterns are not used
-    return value as string;
-  };
-
-  /**
    * Gets the active stroke color.
    */
   const getActiveStrokeColor = () => {
@@ -188,6 +327,16 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     }
 
     return selectedObject.get('stroke') || strokeColor;
+  };
+
+  /**
+   * Changes the stroke width.
+   */
+  const changeStrokeWidth = (value: number) => {
+    setStrokeWidth(value);
+
+    selectedObjects.forEach((object) => object.set({ strokeWidth: value }));
+    canvas.renderAll();
   };
 
   /**
@@ -204,6 +353,16 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   /**
+   * Changes the stroke dash array.
+   */
+  const changeStrokeDashArray = (value: number[]) => {
+    setStrokeDashArray(value);
+
+    selectedObjects.forEach((object) => object.set({ strokeDashArray: value }));
+    canvas.renderAll();
+  };
+
+  /**
    * Gets the active stroke dash array.
    */
   const getActiveStrokeDashArray = () => {
@@ -214,20 +373,6 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     }
 
     return selectedObject.get('strokeDashArray') || strokeDashArray;
-  };
-
-  /**
-   * Gets the active opacity.
-   */
-  const getActiveOpacity = () => {
-    const defaultOpacity = 1;
-    const selectedObject = selectedObjects[0];
-
-    if (!selectedObject) {
-      return defaultOpacity;
-    }
-
-    return selectedObject.get('opacity') || defaultOpacity;
   };
 
   /**
@@ -355,20 +500,30 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
-    changeOpacity,
     bringForward,
     sendBackwards,
-    changeFontFamily,
-    changeFillColor,
-    changeStrokeColor,
-    changeStrokeWidth,
-    changeStrokeDashArray,
-    getActiveFontFamily,
-    getActiveFillColor,
-    getActiveStrokeColor,
-    getActiveStrokeWidth,
-    getActiveStrokeDashArray,
+    changeOpacity,
     getActiveOpacity,
+    changeFontStyle,
+    getActiveFontStyle,
+    changeFontLinethrough,
+    getActiveFontLinethrough,
+    changeFontUnderline,
+    getActiveFontUnderline,
+    changeTextAlign,
+    getActiveTextAlign,
+    changeFontWeight,
+    getActiveFontWeight,
+    changeFontFamily,
+    getActiveFontFamily,
+    changeFillColor,
+    getActiveFillColor,
+    changeStrokeColor,
+    getActiveStrokeColor,
+    changeStrokeWidth,
+    getActiveStrokeWidth,
+    changeStrokeDashArray,
+    getActiveStrokeDashArray,
     addText,
     addCircle,
     addSoftRectangle,
