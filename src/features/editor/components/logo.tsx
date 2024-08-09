@@ -9,6 +9,7 @@ export default function Logo() {
       <div className="relative size-8 shrink-0">
         <Image
           fill
+          priority
           src="/logo.svg"
           alt="ImaginAItion"
           className="shrink-0 transition hover:opacity-75"

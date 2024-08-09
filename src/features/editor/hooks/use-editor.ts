@@ -538,6 +538,20 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     addToCanvas(canvas, diamond);
   };
 
+  /**
+   * Adds the image to the canvas.
+   */
+  const addImage = (url: string) => {
+    fabric.Image.fromURL(url, (image) => {
+      const workspace = getWorkspace(canvas);
+
+      image.scaleToWidth(workspace?.width ?? 0);
+      image.scaleToHeight(workspace?.height ?? 0);
+
+      addToCanvas(canvas, image);
+    }, { crossOrigin: 'anonymous' });
+  };
+
   return {
     deleteSelected,
     bringForward,
@@ -573,6 +587,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     addTriangle,
     addInverseTriangle,
     addDiamond,
+    addImage,
     canvas,
     selectedObjects
   };

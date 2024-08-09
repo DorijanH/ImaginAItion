@@ -52,6 +52,7 @@ export type Editor = {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  addImage: (url: string) => void;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 }

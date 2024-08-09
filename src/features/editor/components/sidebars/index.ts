@@ -1,0 +1,9 @@
+export { default as FillColorSidebar } from './fill-color-sidebar';
+export { default as FontSidebar } from './font-sidebar';
+export { default as OpacitySidebar } from './opacity-sidebar';
+export { default as ShapeSidebar } from './shape-sidebar';
+export { default as Sidebar } from './sidebar';
+export { default as StrokeColorSidebar } from './stroke-color-sidebar';
+export { default as StrokeOptionsSidebar } from './stroke-options-sidebar';
+export { default as TextSidebar } from './text-sidebar';
+export { default as ImageSidebar } from './image-sidebar';

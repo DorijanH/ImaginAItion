@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
 
+import Providers from '@/components/providers/providers';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -18,7 +20,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
 
         <Analytics />
       </body>

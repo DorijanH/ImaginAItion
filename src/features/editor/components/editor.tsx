@@ -8,16 +8,19 @@ import { useEditor } from '@/features/editor/hooks/use-editor';
 import { ActiveTool } from '../types';
 import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
-import TextSidebar from './text-sidebar';
-import StrokeOptionsSidebar from './stroke-options-sidebar';
-import StrokeColorSidebar from './stroke-color-sidebar';
-import Sidebar from './sidebar';
-import ShapeSidebar from './shape-sidebar';
-import OpacitySidebar from './opacity-sidebar';
+import {
+  FillColorSidebar,
+  FontSidebar,
+  ImageSidebar,
+  OpacitySidebar,
+  ShapeSidebar,
+  Sidebar,
+  StrokeColorSidebar,
+  StrokeOptionsSidebar,
+  TextSidebar
+} from './sidebars';
 import Navbar from './navbar';
 import Footer from './footer';
-import FontSidebar from './font-sidebar';
-import FillColorSidebar from './fill-color-sidebar';
 
 export default function Editor() {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
@@ -111,6 +114,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <FontSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <ImageSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

@@ -7,7 +7,7 @@ import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-import { ActiveTool, Editor } from '../types';
+import { ActiveTool, Editor } from '../../types';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 

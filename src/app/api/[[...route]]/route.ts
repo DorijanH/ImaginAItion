@@ -1,14 +1,15 @@
 import { handle } from 'hono/vercel';
 import { Hono } from 'hono';
 
-import users from './users';
+import images from './images';
 
 export const runtime = 'nodejs';
 
 const app = new Hono().basePath('/api');
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const routes = app.route('/users', users);
+const routes = app
+  .route('/images', images);
 
-export const GET = handle(app);
 export type AppType = typeof routes;
+export const GET = handle(app);

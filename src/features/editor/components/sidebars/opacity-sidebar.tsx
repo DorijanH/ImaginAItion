@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-import { ActiveTool, Editor } from '../types';
+import { ActiveTool, Editor } from '../../types';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 

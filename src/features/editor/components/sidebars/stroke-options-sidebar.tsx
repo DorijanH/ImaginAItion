@@ -4,8 +4,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-import { ActiveTool, Editor } from '../types';
-import { STROKE_DASH_ARRAY, STROKE_WIDTH } from '../constants';
+import { ActiveTool, Editor } from '../../types';
+import { STROKE_DASH_ARRAY, STROKE_WIDTH } from '../../constants';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 

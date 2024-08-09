@@ -5,7 +5,7 @@ import { Image, LayoutTemplate, LucideIcon, Settings, Shapes, Sparkles, Type } f
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-import { ActiveTool } from '../types';
+import { ActiveTool } from '../../types';
 
 type SidebarProps = {
   activeTool: ActiveTool;
