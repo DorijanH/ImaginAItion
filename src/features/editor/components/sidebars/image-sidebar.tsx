@@ -4,6 +4,7 @@ import { AlertTriangle, Loader } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { useImages } from '@/features/images/hooks/query';
+import { UploadButton } from '@/components/uploadthing';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { ActiveTool, Editor } from '../../types';
@@ -46,6 +47,22 @@ export default function ImageSidebar(props: ImageSidebarProps) {
       )}
     >
       <ToolSidebarHeader title="Images" description="Add images to your canvas" />
+
+      <div className="border-b p-4">
+        <UploadButton
+          endpoint="imageUploader"
+          appearance={{
+            button: 'w-full text-sm font-medium',
+            allowedContent: 'hidden'
+          }}
+          content={{
+            button: 'Upload Image'
+          }}
+          onClientUploadComplete={(res) => {
+            editor?.addImage(res[0].url);
+          }}
+        />
+      </div>
 
       {isLoading && (
         <div className="flex flex-1 items-center justify-center">
