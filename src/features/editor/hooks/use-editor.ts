@@ -14,6 +14,7 @@ import {
   FONT_STYLE,
   FONT_UNDERLINE,
   FONT_WEIGHT,
+  JSON_PROPERTY_KEYS,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -23,11 +24,17 @@ import {
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
 } from '../constants';
+import { useHistory } from './use-history';
 import { useClipboard } from './use-clipboard';
 import { useCanvasEvents } from './use-canvas-events';
 import { useAutoResize } from './use-auto-resize';
 
 type BuildEditorProps = {
+  save: (skip?: boolean) => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   autoZoom: () => void;
   canvas: fabric.Canvas;
   copy: () => void;
@@ -47,6 +54,11 @@ type BuildEditorProps = {
 
 const buildEditor = (props: BuildEditorProps): Editor => {
   const {
+    save,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     autoZoom,
     canvas,
     copy,
@@ -99,7 +111,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     workspace?.set(value);
     autoZoom();
 
-    // TODO: Save functionality
+    save();
   };
 
   /**
@@ -111,7 +123,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     workspace?.set({ fill: value });
     canvas.renderAll();
 
-    // TODO: Save functionality
+    save();
   };
 
   /**
@@ -648,6 +660,10 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     copy,
     paste,
     zoomIn,
@@ -713,13 +729,24 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { save, canRedo, canUndo, redo, undo, canvasHistory, setHistoryIndex } = useHistory({ canvas });
   const { copy, paste } = useClipboard({ canvas });
   const { autoZoom } = useAutoResize({ canvas, container });
-  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
+  useCanvasEvents({
+    save,
+    canvas,
+    setSelectedObjects,
+    clearSelectionCallback
+  });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        save,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
         autoZoom,
         copy,
         paste,
@@ -739,7 +766,24 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
     }
 
     return undefined;
-  }, [autoZoom, canvas, copy, fillColor, fontFamily, paste, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
+  },
+  [
+    autoZoom,
+    canRedo,
+    canUndo,
+    canvas,
+    copy,
+    fillColor,
+    fontFamily,
+    paste,
+    redo,
+    save,
+    selectedObjects,
+    strokeColor,
+    strokeDashArray,
+    strokeWidth,
+    undo
+  ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
     fabric.Object.prototype.set({
@@ -774,7 +818,14 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
 
     setCanvas(initialCanvas);
     setContainer(initialContainer);
-  }, []);
+
+    // Initial history
+    const currentState = initialCanvas.toJSON(JSON_PROPERTY_KEYS);
+    const currentStateJson = JSON.stringify(currentState);
+
+    canvasHistory.current = [currentStateJson];
+    setHistoryIndex(0);
+  }, [canvasHistory, setHistoryIndex]);
 
   return {
     init,

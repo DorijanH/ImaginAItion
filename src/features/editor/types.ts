@@ -24,6 +24,10 @@ export type Font = typeof FONTS[number];
 export type Filter = typeof FILTERS[number];
 
 export type Editor = {
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   copy: () => void;
   paste: () => void;
   zoomIn: () => void;

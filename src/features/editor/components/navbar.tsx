@@ -15,19 +15,35 @@ import {
 import { Button } from '@/components/ui/button';
 import Hint from '@/components/hint';
 
-import { ActiveTool } from '../types';
+import { ActiveTool, Editor } from '../types';
 import Logo from './logo';
 
 type NavbarProps = {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
 export default function Navbar(props: NavbarProps) {
   const {
+    editor,
     activeTool,
     onChangeActiveTool
   } = props;
+
+  /**
+   * Handles the undo action.
+   */
+  const handleUndo = () => {
+    editor?.undo();
+  };
+
+  /**
+   * Handles the redo action.
+   */
+  const handleRedo = () => {
+    editor?.redo();
+  };
 
   return (
     <nav className="flex h-[68px] w-full items-center gap-x-8 border-b p-4 lg:pl-[34px]">
@@ -61,48 +77,29 @@ export default function Navbar(props: NavbarProps) {
 
         <Separator orientation="vertical" className="mx-2" />
 
-        <Hint
-          side="bottom"
+        <NavbarButton
           label="Select"
-          sideOffset={10}
+          onClick={() => onChangeActiveTool('select')}
+          className={cn(activeTool === 'select' && 'bg-gray-100')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => onChangeActiveTool('select')}
-            className={cn(activeTool === 'select' && 'bg-gray-100')}
-          >
-            <MousePointerClick className="size-4" />
-          </Button>
-        </Hint>
+          <MousePointerClick className="size-4" />
+        </NavbarButton>
 
-        <Hint
+        <NavbarButton
           label="Undo"
-          side="bottom"
-          sideOffset={10}
+          onClick={handleUndo}
+          disabled={!editor?.canUndo()}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => console.log('ON UNDO CLICK')}
-          >
-            <Undo2 className="size-4" />
-          </Button>
-        </Hint>
+          <Undo2 className="size-4" />
+        </NavbarButton>
 
-        <Hint
+        <NavbarButton
           label="Redo"
-          side="bottom"
-          sideOffset={10}
+          onClick={handleRedo}
+          disabled={!editor?.canRedo()}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => console.log('ON REDO CLICK')}
-          >
-            <Redo2 className="size-4" />
-          </Button>
-        </Hint>
+          <Redo2 className="size-4" />
+        </NavbarButton>
 
         <Separator orientation="vertical" className="mx-2" />
 
@@ -184,5 +181,41 @@ export default function Navbar(props: NavbarProps) {
         </div>
       </div>
     </nav>
+  );
+}
+
+type NavbarButtonProps = {
+  label: string;
+  disabled?: boolean;
+  className?: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+function NavbarButton(props: NavbarButtonProps) {
+  const {
+    label,
+    disabled,
+    onClick,
+    children,
+    className
+  } = props;
+
+  return (
+    <Hint
+      side="bottom"
+      label={label}
+      sideOffset={10}
+    >
+      <Button
+        size="icon"
+        variant="ghost"
+        onClick={onClick}
+        disabled={disabled}
+        className={className}
+      >
+        {children}
+      </Button>
+    </Hint>
   );
 }

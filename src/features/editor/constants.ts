@@ -145,3 +145,14 @@ export const SELECTION_DEPENDENT_TOOLS: ActiveTool[] = [
   'stroke-color',
   'stroke-width'
 ];
+
+export const JSON_PROPERTY_KEYS = [
+  'name',
+  'gradientAngle',
+  'selectable',
+  'hasControls',
+  'linkData',
+  'editable',
+  'extensionType',
+  'extension'
+];
