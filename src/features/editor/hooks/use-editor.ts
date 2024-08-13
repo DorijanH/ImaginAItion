@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
 import { ITextOptions } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
 
-import { Editor } from '../types';
-import { addToCanvas, getWorkspace, isTextType } from '../helpers';
+import { Editor, Filter, Font } from '../types';
+import { addToCanvas, createFilter, getWorkspace, isImageType, isTextType } from '../helpers';
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -86,6 +86,23 @@ const buildEditor = (props: BuildEditorProps): Editor => {
 
     const workspace = getWorkspace(canvas);
     workspace?.sendToBack();
+  };
+
+  /**
+   * Changes the image filter.
+   */
+  const changeImageFilter = (value: Filter) => {
+    selectedObjects.forEach((object) => {
+      if (isImageType(object.type)) {
+        const imageObject = object as fabric.Image;
+
+        const effect = createFilter(value);
+
+        imageObject.filters = effect ? [effect] : [];
+        imageObject.applyFilters();
+        canvas.renderAll();
+      }
+    });
   };
 
   /**
@@ -282,7 +299,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   /**
    * Changes the font family.
    */
-  const changeFontFamily = (value: string) => {
+  const changeFontFamily = (value: Font) => {
     setFontFamily(value);
 
     selectedObjects.forEach((object) => {
@@ -556,6 +573,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     deleteSelected,
     bringForward,
     sendBackwards,
+    changeImageFilter,
     changeOpacity,
     getActiveOpacity,
     changeFontStyle,

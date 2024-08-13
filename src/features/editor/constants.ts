@@ -35,7 +35,33 @@ export const FONTS = [
   'Lucida Sans Unicode',
   'Geneva',
   'Lucida Console'
-];
+] as const;
+
+export const FILTERS = [
+  'none',
+  'polaroid',
+  'sepia',
+  'kodachrome',
+  'contrast',
+  'brightness',
+  'greyscale',
+  'brownie',
+  'vintage',
+  'technicolor',
+  'pixelate',
+  'invert',
+  'blur',
+  'sharpen',
+  'emboss',
+  'removecolor',
+  'blacknwhite',
+  'vibrance',
+  'blendcolor',
+  'huerotate',
+  'resize',
+  'saturation',
+  'gamma'
+] as const;
 
 export const CIRCLE_OPTIONS = {
   radius: 200,

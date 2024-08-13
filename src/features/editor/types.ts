@@ -1,5 +1,7 @@
 import { ITextboxOptions } from 'fabric/fabric-impl';
 
+import { FILTERS, FONTS } from './constants';
+
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -17,10 +19,15 @@ export type ActiveTool =
   | 'remove-bg'
   | 'templates';
 
+export type Font = typeof FONTS[number];
+
+export type Filter = typeof FILTERS[number];
+
 export type Editor = {
   deleteSelected: () => void;
   bringForward: () => void;
   sendBackwards: () => void;
+  changeImageFilter: (value: Filter) => void;
   changeOpacity: (value: number) => void;
   getActiveOpacity: () => number;
   changeFontStyle: (value: string) => void;
@@ -35,7 +42,7 @@ export type Editor = {
   getActiveFontSize: () => number;
   changeFontWeight: (value: number) => void;
   getActiveFontWeight: () => number;
-  changeFontFamily: (value: string) => void;
+  changeFontFamily: (value: Font) => void;
   getActiveFontFamily: () => string;
   changeFillColor: (value: string) => void;
   getActiveFillColor: () => string;

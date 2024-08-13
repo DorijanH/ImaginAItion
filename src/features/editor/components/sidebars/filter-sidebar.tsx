@@ -2,25 +2,23 @@ import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 
-import { ActiveTool, Editor, Font } from '../../types';
-import { FONT_FAMILY, FONTS } from '../../constants';
+import { ActiveTool, Editor, Filter } from '../../types';
+import { FILTERS  } from '../../constants';
 import ToolSidebarHeader from './tool-sidebar-header';
 import ToolSidebarClose from './tool-sidebar-close';
 
-type FontSidebarProps = {
+type FilterSidebarProps = {
   editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (too: ActiveTool) => void;
 }
 
-export default function FontSidebar(props: FontSidebarProps) {
+export default function FilterSidebar(props: FilterSidebarProps) {
   const {
     editor,
     activeTool,
     onChangeActiveTool
   } = props;
-
-  const value = editor?.getActiveFontFamily() ?? FONT_FAMILY;
 
   /**
    * Handles the close action.
@@ -30,35 +28,31 @@ export default function FontSidebar(props: FontSidebarProps) {
   };
 
   /**
-   * Handles the font change action.
+   * Handles the image filter change action.
    */
-  const handleFontChange = (value: Font) => {
-    editor?.changeFontFamily(value);
+  const handleFilterChange = (value: Filter) => {
+    editor?.changeImageFilter(value);
   };
 
   return (
     <aside
       className={cn('relative z-40 flex h-full w-[360px] flex-col border-r bg-white',
-        activeTool === 'font' ? 'visible' : 'hidden'
+        activeTool === 'filter' ? 'visible' : 'hidden'
       )}
     >
-      <ToolSidebarHeader title="Font" description="Change the text font" />
+      <ToolSidebarHeader title="Filters" description="Apply a filter to selected image" />
 
       <ScrollArea>
         <div className="space-y-2 border-b p-4">
-          {FONTS.map((font) => (
+          {FILTERS.map((filter) => (
             <Button
               size="lg"
-              key={font}
+              key={filter}
               variant="secondary"
-              style={{ fontFamily: font }}
-              onClick={() => handleFontChange(font)}
-              className={cn(
-                'h-16 w-full justify-start px-4 py-2 text-base',
-                value === font && 'border-2 border-blue-500'
-              )}
+              className="h-16 w-full justify-start"
+              onClick={() => handleFilterChange(filter)}
             >
-              {font}
+              {filter}
             </Button>
           ))}
         </div>

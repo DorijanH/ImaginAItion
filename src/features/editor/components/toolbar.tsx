@@ -1,3 +1,4 @@
+import { TbColorFilter } from 'react-icons/tb';
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { BsBorderWidth } from 'react-icons/bs';
@@ -9,7 +10,7 @@ import { Button, ButtonProps } from '@/components/ui/button';
 import Hint from '@/components/hint';
 
 import { ActiveTool, Editor } from '../types';
-import { isTextType } from '../helpers';
+import { isImageType, isTextType } from '../helpers';
 import {
   FILL_COLOR,
   FONT_FAMILY,
@@ -56,7 +57,10 @@ export default function Toolbar(props: ToolbarProps) {
   }
 
   const selectedObject = editor?.selectedObjects[0];
-  const isText = isTextType(selectedObject?.type);
+  const selectedObjectType = selectedObject?.type;
+
+  const isText = isTextType(selectedObjectType);
+  const isImage = isImageType(selectedObjectType);
 
   const isBold = properties.fontWeight > 500;
   const isItalic = properties.fontStyle === 'italic';
@@ -156,112 +160,12 @@ export default function Toolbar(props: ToolbarProps) {
     }));
   };
 
-  return (
-    <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
-      <div className="flex h-full items-center justify-center gap-x-2">
-        <ToolbarButton
-          label="Color"
-          onClick={() => onChangeActiveTool('fill')}
-          className={cn(activeTool === 'fill' && 'bg-gray-100')}
-        >
-          <div className="size-4 rounded-sm border" style={{ backgroundColor: properties.fillColor }} />
-        </ToolbarButton>
-
-        {isText ? (
-          <>
-            <ToolbarButton
-              size="sm"
-              label="Font"
-              onClick={() => onChangeActiveTool('font')}
-              className={cn(activeTool === 'font' && 'bg-gray-100')}
-            >
-              <div className="max-w-[100px] truncate">
-                {properties.fontFamily}
-              </div>
-              <ChevronDown className="ml-2 size-4 shrink-0" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Bold"
-              onClick={handleToggleBold}
-              className={cn(isBold && 'bg-gray-100')}
-            >
-              <FaBold className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Italic"
-              onClick={handleToggleItalic}
-              className={cn(isItalic && 'bg-gray-100')}
-            >
-              <FaItalic className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Underline"
-              onClick={handleToggleUnderline}
-              className={cn(properties.fontUnderline && 'bg-gray-100')}
-            >
-              <FaUnderline className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Strike"
-              onClick={handleToggleLinethrough}
-              className={cn(properties.fontLinethrough && 'bg-gray-100')}
-            >
-              <FaStrikethrough className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Align left"
-              onClick={() => handleTextAlignChange('left')}
-              className={cn(properties.textAlign === 'left' && 'bg-gray-100')}
-            >
-              <AlignLeft className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Align center"
-              onClick={() => handleTextAlignChange('center')}
-              className={cn(properties.textAlign === 'center' && 'bg-gray-100')}
-            >
-              <AlignCenter className="size-4" />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Align right"
-              onClick={() => handleTextAlignChange('right')}
-              className={cn(properties.textAlign === 'right' && 'bg-gray-100')}
-            >
-              <AlignRight className="size-4" />
-            </ToolbarButton>
-
-            <FontSizeInput
-              value={properties.fontSize}
-              onChange={handleFontSizeChange}
-            />
-          </>
-        ) : (
-          <>
-            <ToolbarButton
-              label="Stroke color"
-              onClick={() => onChangeActiveTool('stroke-color')}
-              className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
-            >
-              <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: properties.strokeColor }} />
-            </ToolbarButton>
-
-            <ToolbarButton
-              label="Stroke options"
-              onClick={() => onChangeActiveTool('stroke-width')}
-              className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
-            >
-              <BsBorderWidth className="size-4" />
-            </ToolbarButton>
-          </>
-        )}
-
+  /**
+   * Renders the toolbar actions based on the selected object's type.
+   */
+  const renderToolbarActions = () => {
+    const shareableActions = (
+      <>
         <ToolbarButton label="Bring forward" onClick={handleBringForward}>
           <ArrowUp className="size-4" />
         </ToolbarButton>
@@ -281,6 +185,165 @@ export default function Toolbar(props: ToolbarProps) {
         <ToolbarButton label="Delete" onClick={handleDelete}>
           <Trash className="size-4" />
         </ToolbarButton>
+      </>
+    );
+
+    if (isText) {
+      return (
+        <>
+          <ToolbarButton
+            label="Color"
+            onClick={() => onChangeActiveTool('fill')}
+            className={cn(activeTool === 'fill' && 'bg-gray-100')}
+          >
+            <div className="size-4 rounded-sm border" style={{ backgroundColor: properties.fillColor }} />
+          </ToolbarButton>
+
+          <ToolbarButton
+            size="sm"
+            label="Font"
+            onClick={() => onChangeActiveTool('font')}
+            className={cn(activeTool === 'font' && 'bg-gray-100')}
+          >
+            <div className="max-w-[100px] truncate">
+              {properties.fontFamily}
+            </div>
+            <ChevronDown className="ml-2 size-4 shrink-0" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Bold"
+            onClick={handleToggleBold}
+            className={cn(isBold && 'bg-gray-100')}
+          >
+            <FaBold className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Italic"
+            onClick={handleToggleItalic}
+            className={cn(isItalic && 'bg-gray-100')}
+          >
+            <FaItalic className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Underline"
+            onClick={handleToggleUnderline}
+            className={cn(properties.fontUnderline && 'bg-gray-100')}
+          >
+            <FaUnderline className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Strike"
+            onClick={handleToggleLinethrough}
+            className={cn(properties.fontLinethrough && 'bg-gray-100')}
+          >
+            <FaStrikethrough className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Align left"
+            onClick={() => handleTextAlignChange('left')}
+            className={cn(properties.textAlign === 'left' && 'bg-gray-100')}
+          >
+            <AlignLeft className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Align center"
+            onClick={() => handleTextAlignChange('center')}
+            className={cn(properties.textAlign === 'center' && 'bg-gray-100')}
+          >
+            <AlignCenter className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Align right"
+            onClick={() => handleTextAlignChange('right')}
+            className={cn(properties.textAlign === 'right' && 'bg-gray-100')}
+          >
+            <AlignRight className="size-4" />
+          </ToolbarButton>
+
+          <FontSizeInput
+            value={properties.fontSize}
+            onChange={handleFontSizeChange}
+          />
+
+          {shareableActions}
+        </>
+      );
+    }
+
+    if (isImage) {
+      return (
+        <>
+          <ToolbarButton
+            label="Stroke color"
+            onClick={() => onChangeActiveTool('stroke-color')}
+            className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
+          >
+            <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: properties.strokeColor }} />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Stroke options"
+            onClick={() => onChangeActiveTool('stroke-width')}
+            className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+          >
+            <BsBorderWidth className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Filters"
+            onClick={() => onChangeActiveTool('filter')}
+            className={cn(activeTool === 'filter' && 'bg-gray-100')}
+          >
+            <TbColorFilter className="size-4" />
+          </ToolbarButton>
+
+          {shareableActions}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ToolbarButton
+          label="Color"
+          onClick={() => onChangeActiveTool('fill')}
+          className={cn(activeTool === 'fill' && 'bg-gray-100')}
+        >
+          <div className="size-4 rounded-sm border" style={{ backgroundColor: properties.fillColor }} />
+        </ToolbarButton>
+
+        <ToolbarButton
+          label="Stroke color"
+          onClick={() => onChangeActiveTool('stroke-color')}
+          className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
+        >
+          <div className="size-4 rounded-sm border-2 bg-white" style={{ borderColor: properties.strokeColor }} />
+        </ToolbarButton>
+
+        <ToolbarButton
+          label="Stroke options"
+          onClick={() => onChangeActiveTool('stroke-width')}
+          className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+        >
+          <BsBorderWidth className="size-4" />
+        </ToolbarButton>
+
+        {shareableActions}
+      </>
+    );
+  };
+
+  return (
+    <div className="z-[49] flex h-[56px] w-full shrink-0 overflow-x-auto border-b bg-white p-2">
+      <div className="flex h-full items-center justify-center gap-x-2">
+        {renderToolbarActions()}
       </div>
     </div>
   );
