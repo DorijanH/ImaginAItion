@@ -10,6 +10,7 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  Copy,
   SquareSplitHorizontal,
   Trash
 } from 'lucide-react';
@@ -93,6 +94,14 @@ export default function Toolbar(props: ToolbarProps) {
    */
   const handleSendBackwards = () => {
     editor?.sendBackwards();
+  };
+
+  /**
+   * Handles the duplicate action.
+   */
+  const handleDuplicate = () => {
+    editor?.copy();
+    editor?.paste();
   };
 
   /**
@@ -189,6 +198,10 @@ export default function Toolbar(props: ToolbarProps) {
           className={cn(activeTool === 'opacity' && 'bg-gray-100')}
         >
           <RxTransparencyGrid className="size-4" />
+        </ToolbarButton>
+
+        <ToolbarButton label="Duplicate" onClick={handleDuplicate}>
+          <Copy className="size-4" />
         </ToolbarButton>
 
         <ToolbarButton label="Delete" onClick={handleDelete}>

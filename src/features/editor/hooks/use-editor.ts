@@ -23,11 +23,14 @@ import {
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
 } from '../constants';
+import { useClipboard } from './use-clipboard';
 import { useCanvasEvents } from './use-canvas-events';
 import { useAutoResize } from './use-auto-resize';
 
 type BuildEditorProps = {
   canvas: fabric.Canvas;
+  copy: () => void;
+  paste: () => void;
   selectedObjects: fabric.Object[];
   fillColor: string;
   setFillColor: Dispatch<SetStateAction<string>>;
@@ -44,6 +47,8 @@ type BuildEditorProps = {
 const buildEditor = (props: BuildEditorProps): Editor => {
   const {
     canvas,
+    copy,
+    paste,
     selectedObjects,
     fillColor,
     setFillColor,
@@ -570,6 +575,8 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    copy,
+    paste,
     deleteSelected,
     bringForward,
     sendBackwards,
@@ -630,12 +637,15 @@ export function useEditor(props: UseEditorProps) {
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { copy, paste } = useClipboard({ canvas });
   useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         selectedObjects,
         fillColor,
@@ -652,7 +662,7 @@ export function useEditor(props: UseEditorProps) {
     }
 
     return undefined;
-  }, [canvas, fillColor, fontFamily, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
+  }, [canvas, copy, fillColor, fontFamily, paste, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
     fabric.Object.prototype.set({

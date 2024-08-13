@@ -24,6 +24,8 @@ export type Font = typeof FONTS[number];
 export type Filter = typeof FILTERS[number];
 
 export type Editor = {
+  copy: () => void;
+  paste: () => void;
   deleteSelected: () => void;
   bringForward: () => void;
   sendBackwards: () => void;
