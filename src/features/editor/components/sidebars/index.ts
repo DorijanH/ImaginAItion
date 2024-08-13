@@ -7,3 +7,5 @@ export { default as StrokeColorSidebar } from './stroke-color-sidebar';
 export { default as StrokeOptionsSidebar } from './stroke-options-sidebar';
 export { default as TextSidebar } from './text-sidebar';
 export { default as ImageSidebar } from './image-sidebar';
+export { default as FilterSidebar } from './filter-sidebar';
+export { default as AiSidebar } from './ai-sidebar';

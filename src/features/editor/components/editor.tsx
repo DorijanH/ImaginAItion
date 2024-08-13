@@ -8,9 +8,10 @@ import { useEditor } from '@/features/editor/hooks/use-editor';
 import { ActiveTool } from '../types';
 import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
-import FilterSidebar from './sidebars/filter-sidebar';
 import {
+  AiSidebar,
   FillColorSidebar,
+  FilterSidebar,
   FontSidebar,
   ImageSidebar,
   OpacitySidebar,
@@ -125,6 +126,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <FilterSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <AiSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
