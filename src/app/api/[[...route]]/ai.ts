@@ -21,6 +21,22 @@ const ai = new Hono()
 
       return c.json({ data: response[0] });
     }
+  )
+  .post(
+    '/remove-bg',
+    zValidator('json', z.object({ imageUrl: z.string() })),
+    async (c) => {
+      const { imageUrl } = c.req.valid('json');
+
+      const input = {
+        image: imageUrl
+      };
+
+      const output: unknown = await replicate.run('cjwbw/rembg:fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003', { input });
+      const response = output as string;
+
+      return c.json({ data: response });
+    }
   );
 
 export default ai;

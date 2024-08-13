@@ -23,7 +23,7 @@ export default function AiSidebar(props: AiSidebarProps) {
     onChangeActiveTool
   } = props;
 
-  const { mutate, isPending } = useGenerateImage();
+  const { mutate: generate, isPending } = useGenerateImage();
 
   const [value, setValue] = useState<string>('');
 
@@ -42,7 +42,7 @@ export default function AiSidebar(props: AiSidebarProps) {
 
     // TODO: Paywall
 
-    mutate({ prompt: value }, {
+    generate({ prompt: value }, {
       onSuccess: ({ data }) => editor?.addImage(data)
     });
   };

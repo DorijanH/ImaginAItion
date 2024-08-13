@@ -15,6 +15,7 @@ import {
   FontSidebar,
   ImageSidebar,
   OpacitySidebar,
+  RemoveBgSidebar,
   ShapeSidebar,
   Sidebar,
   StrokeColorSidebar,
@@ -131,6 +132,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <AiSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <RemoveBgSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

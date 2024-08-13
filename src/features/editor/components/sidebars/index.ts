@@ -9,3 +9,4 @@ export { default as TextSidebar } from './text-sidebar';
 export { default as ImageSidebar } from './image-sidebar';
 export { default as FilterSidebar } from './filter-sidebar';
 export { default as AiSidebar } from './ai-sidebar';
+export { default as RemoveBgSidebar } from './remove-bg-sidebar';

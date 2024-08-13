@@ -3,7 +3,16 @@ import { RxTransparencyGrid } from 'react-icons/rx';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { BsBorderWidth } from 'react-icons/bs';
 import { useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Trash } from 'lucide-react';
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  ArrowDown,
+  ArrowUp,
+  ChevronDown,
+  SquareSplitHorizontal,
+  Trash
+} from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button, ButtonProps } from '@/components/ui/button';
@@ -302,6 +311,14 @@ export default function Toolbar(props: ToolbarProps) {
             className={cn(activeTool === 'filter' && 'bg-gray-100')}
           >
             <TbColorFilter className="size-4" />
+          </ToolbarButton>
+
+          <ToolbarButton
+            label="Remove background"
+            onClick={() => onChangeActiveTool('remove-bg')}
+            className={cn(activeTool === 'remove-bg' && 'bg-gray-100')}
+          >
+            <SquareSplitHorizontal className="size-4" />
           </ToolbarButton>
 
           {shareableActions}
