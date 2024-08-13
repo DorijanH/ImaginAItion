@@ -45,7 +45,7 @@ export default function StrokeColorSidebar(props: StrokeColorSidebarProps) {
       <ToolSidebarHeader title="Stroke color" description="Add stroke color to your element" />
 
       <ScrollArea>
-        <div className="space-y-6 p-4">
+        <div className="p-4">
           <ColorPicker value={value} onChange={handleChange} />
         </div>
       </ScrollArea>

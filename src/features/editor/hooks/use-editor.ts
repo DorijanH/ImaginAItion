@@ -28,6 +28,7 @@ import { useCanvasEvents } from './use-canvas-events';
 import { useAutoResize } from './use-auto-resize';
 
 type BuildEditorProps = {
+  autoZoom: () => void;
   canvas: fabric.Canvas;
   copy: () => void;
   paste: () => void;
@@ -46,6 +47,7 @@ type BuildEditorProps = {
 
 const buildEditor = (props: BuildEditorProps): Editor => {
   const {
+    autoZoom,
     canvas,
     copy,
     paste,
@@ -61,6 +63,30 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     fontFamily,
     setFontFamily
   } = props;
+
+  /**
+   * Changes the workspace size.
+   */
+  const changeSize = (value: { width: number; height: number }) => {
+    const workspace = getWorkspace(canvas);
+
+    workspace?.set(value);
+    autoZoom();
+
+    // TODO: Save functionality
+  };
+
+  /**
+   * Changes the workspace background.
+   */
+  const changeBackground = (value: string) => {
+    const workspace = getWorkspace(canvas);
+
+    workspace?.set({ fill: value });
+    canvas.renderAll();
+
+    // TODO: Save functionality
+  };
 
   /**
    * Enables the drawing mode.
@@ -598,6 +624,8 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   return {
     copy,
     paste,
+    changeSize,
+    changeBackground,
     enableDrawMode,
     disableDrawMode,
     deleteSelected,
@@ -657,12 +685,13 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
 
   const { copy, paste } = useClipboard({ canvas });
-  useAutoResize({ canvas, container });
+  const { autoZoom } = useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        autoZoom,
         copy,
         paste,
         canvas,
@@ -681,7 +710,7 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
     }
 
     return undefined;
-  }, [canvas, copy, fillColor, fontFamily, paste, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
+  }, [autoZoom, canvas, copy, fillColor, fontFamily, paste, selectedObjects, strokeColor, strokeDashArray, strokeWidth]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: { initialCanvas: fabric.Canvas; initialContainer: HTMLDivElement }) => {
     fabric.Object.prototype.set({

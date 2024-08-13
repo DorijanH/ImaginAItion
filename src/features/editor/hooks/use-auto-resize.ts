@@ -71,4 +71,8 @@ export function useAutoResize(props: UseAutoResizeProps) {
       }
     };
   }, [canvas, container, autoZoom]);
+
+  return {
+    autoZoom
+  };
 }
