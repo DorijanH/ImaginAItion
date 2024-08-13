@@ -63,6 +63,25 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
+   * Enables the drawing mode.
+   */
+  const enableDrawMode = () => {
+    canvas.discardActiveObject();
+    canvas.renderAll();
+
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.width = strokeWidth;
+    canvas.freeDrawingBrush.color = strokeColor;
+  };
+
+  /**
+   * Disables the drawing mode.
+   */
+  const disableDrawMode = () => {
+    canvas.isDrawingMode = false;
+  };
+
+  /**
    * Deletes the currently selected object.
    */
   const deleteSelected = () => {
@@ -374,6 +393,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
       object.set({ stroke: value });
     });
 
+    canvas.freeDrawingBrush.color = value;
     canvas.renderAll();
   };
 
@@ -397,6 +417,7 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     setStrokeWidth(value);
 
     selectedObjects.forEach((object) => object.set({ strokeWidth: value }));
+    canvas.freeDrawingBrush.width = value;
     canvas.renderAll();
   };
 
@@ -577,6 +598,8 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   return {
     copy,
     paste,
+    enableDrawMode,
+    disableDrawMode,
     deleteSelected,
     bringForward,
     sendBackwards,
@@ -622,11 +645,7 @@ type UseEditorProps = {
   clearSelectionCallback?: () => void;
 };
 
-export function useEditor(props: UseEditorProps) {
-  const {
-    clearSelectionCallback
-  } = props;
-
+export function useEditor({ clearSelectionCallback }: UseEditorProps) {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);

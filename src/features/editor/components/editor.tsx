@@ -10,6 +10,7 @@ import { SELECTION_DEPENDENT_TOOLS } from '../constants';
 import Toolbar from './toolbar';
 import {
   AiSidebar,
+  DrawSidebar,
   FillColorSidebar,
   FilterSidebar,
   FontSidebar,
@@ -37,9 +38,7 @@ export default function Editor() {
     }
   }, [activeTool]);
 
-  const { init, editor } = useEditor({
-    clearSelectionCallback: handleClearSelection
-  });
+  const { init, editor } = useEditor({ clearSelectionCallback: handleClearSelection });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,20 +63,20 @@ export default function Editor() {
    * Handles the active tool change action.
    */
   const handleChangeActiveTool = useCallback((tool: ActiveTool) => {
+    if (activeTool === 'draw') {
+      editor?.disableDrawMode();
+    }
+
     if (tool === activeTool) {
       return setActiveTool('select');
     }
 
     if (tool === 'draw') {
-      // TODO: Enable draw mode
-    }
-
-    if (activeTool === 'draw') {
-      // TODO: Disable draw mode
+      editor?.enableDrawMode();
     }
 
     setActiveTool(tool);
-  }, [activeTool]);
+  }, [activeTool, editor]);
 
   return (
     <div className="flex h-full flex-col">
@@ -137,6 +136,11 @@ export default function Editor() {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <RemoveBgSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <DrawSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
