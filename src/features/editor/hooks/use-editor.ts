@@ -3,7 +3,15 @@ import { ITextOptions } from 'fabric/fabric-impl';
 import { fabric } from 'fabric';
 
 import { Editor, Filter, Font } from '../types';
-import { addToCanvas, createFilter, getWorkspace, isImageType, isTextType } from '../helpers';
+import {
+  addToCanvas,
+  createFilter,
+  downloadFile,
+  generateSaveOptions,
+  getWorkspace,
+  isImageType,
+  isTextType
+} from '../helpers';
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -24,6 +32,7 @@ import {
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
 } from '../constants';
+import { useWindowEvents } from './use-window-events';
 import { useHotkeys } from './use-hotkeys';
 import { useHistory } from './use-history';
 import { useClipboard } from './use-clipboard';
@@ -76,6 +85,70 @@ const buildEditor = (props: BuildEditorProps): Editor => {
     fontFamily,
     setFontFamily
   } = props;
+
+  /**
+   * Saves the canvas as a PNG.
+   */
+  const savePng = () => {
+    const options = generateSaveOptions(canvas);
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+
+    const dataUrl = canvas.toDataURL(options);
+    downloadFile(dataUrl, 'png');
+
+    autoZoom();
+  };
+
+  /**
+   * Saves the canvas as a SVG.
+   */
+  const saveSvg = () => {
+    const options = generateSaveOptions(canvas);
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+
+    const dataUrl = canvas.toDataURL(options);
+    downloadFile(dataUrl, 'svg');
+
+    autoZoom();
+  };
+
+  /**
+   * Saves the canvas as a JPG.
+   */
+  const saveJpg = () => {
+    const options = generateSaveOptions(canvas);
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+
+    const dataUrl = canvas.toDataURL(options);
+    downloadFile(dataUrl, 'jpg');
+
+    autoZoom();
+  };
+
+  /**
+   * Saves the canvas as a JSON.
+   */
+  const saveJson = () => {
+    const currentState = canvas.toJSON(JSON_PROPERTY_KEYS);
+    const currentStateJson = JSON.stringify(currentState, null, '\t');
+
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(currentStateJson)}`;
+    downloadFile(fileString, 'json');
+  };
+
+  /**
+   * Loads the canvas from a JSON.
+   */
+  const loadJson = (json: string) => {
+    const data = JSON.parse(json);
+
+    canvas.loadFromJSON(data, () => {
+      autoZoom();
+    });
+  };
 
   /**
    * Zooms out from the workspace.
@@ -661,6 +734,12 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   };
 
   return {
+    savePng,
+    saveSvg,
+    saveJpg,
+    saveJson,
+    loadJson,
+    save,
     undo,
     redo,
     canUndo,
@@ -729,6 +808,8 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
   const [strokeColor, setStrokeColor] = useState<string>(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
+
+  useWindowEvents();
 
   const { save, canRedo, canUndo, redo, undo, canvasHistory, setHistoryIndex } = useHistory({ canvas });
   const { copy, paste } = useClipboard({ canvas });

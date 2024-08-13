@@ -1,5 +1,6 @@
 'use client';
 
+import { useFilePicker } from 'use-file-picker';
 import { CiFileOn } from 'react-icons/ci';
 import { BsCloudCheck } from 'react-icons/bs';
 import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from 'lucide-react';
@@ -31,6 +32,21 @@ export default function Navbar(props: NavbarProps) {
     onChangeActiveTool
   } = props;
 
+  const { openFilePicker } = useFilePicker({
+    accept: '.json',
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+
+        reader.readAsText(file, 'UTF-8');
+        reader.onload = () => {
+          editor?.loadJson(reader.result as string);
+        };
+      }
+    }
+  });
+
   /**
    * Handles the undo action.
    */
@@ -43,6 +59,34 @@ export default function Navbar(props: NavbarProps) {
    */
   const handleRedo = () => {
     editor?.redo();
+  };
+
+  /**
+   * Handles the JSON export action.
+   */
+  const handleExportJson = () => {
+    editor?.saveJson();
+  };
+
+  /**
+   * Handles the PNG export action.
+   */
+  const handleExportPng = () => {
+    editor?.savePng();
+  };
+
+  /**
+   * Handles the JPG export action.
+   */
+  const handleExportJpg = () => {
+    editor?.saveJpg();
+  };
+
+  /**
+   * Handles the SVG export action.
+   */
+  const handleExportSvg = () => {
+    editor?.saveSvg();
   };
 
   return (
@@ -60,8 +104,8 @@ export default function Navbar(props: NavbarProps) {
 
           <DropdownMenuContent align="start" className="min-w-60">
             <DropdownMenuItem
+              onClick={openFilePicker}
               className="flex items-center gap-x-2"
-              onClick={() => console.log('OPEN A FILE')}
             >
               <CiFileOn className="size-8" />
 
@@ -123,8 +167,8 @@ export default function Navbar(props: NavbarProps) {
 
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
+                onClick={handleExportJson}
                 className="flex items-center gap-x-2"
-                onClick={() => console.log('EXPORT JSON')}
               >
                 <CiFileOn className="size-8" />
 
@@ -136,8 +180,8 @@ export default function Navbar(props: NavbarProps) {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={handleExportPng}
                 className="flex items-center gap-x-2"
-                onClick={() => console.log('EXPORT PNG')}
               >
                 <CiFileOn className="size-8" />
 
@@ -149,8 +193,8 @@ export default function Navbar(props: NavbarProps) {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={handleExportJpg}
                 className="flex items-center gap-x-2"
-                onClick={() => console.log('EXPORT JPG')}
               >
                 <CiFileOn className="size-8" />
 
@@ -162,8 +206,8 @@ export default function Navbar(props: NavbarProps) {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={handleExportSvg}
                 className="flex items-center gap-x-2"
-                onClick={() => console.log('EXPORT SVG')}
               >
                 <CiFileOn className="size-8" />
 

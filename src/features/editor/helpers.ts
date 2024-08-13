@@ -131,3 +131,27 @@ export function createFilter(value: Filter) {
 
   return effect;
 }
+
+export function generateSaveOptions(canvas: fabric.Canvas) {
+  const { width, height, left, top } = getWorkspace(canvas) as fabric.Rect;
+
+  return {
+    name: 'Image',
+    format: 'png',
+    quality: 1,
+    width,
+    height,
+    left,
+    top
+  };
+}
+
+export function downloadFile(fileUrl: string, type: string) {
+  const anchorElement = document.createElement('a');
+  anchorElement.href = fileUrl;
+  anchorElement.download = `${crypto.randomUUID()}.${type}`;
+
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  anchorElement.remove();
+}

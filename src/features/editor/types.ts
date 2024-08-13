@@ -24,6 +24,12 @@ export type Font = typeof FONTS[number];
 export type Filter = typeof FILTERS[number];
 
 export type Editor = {
+  savePng: () => void;
+  saveSvg: () => void;
+  saveJpg: () => void;
+  saveJson: () => void;
+  loadJson: (json: string) => void;
+  save: (skip?: boolean) => void;
   undo: () => void;
   redo: () => void;
   canUndo: () => boolean;
