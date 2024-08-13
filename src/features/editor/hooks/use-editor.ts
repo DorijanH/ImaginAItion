@@ -65,6 +65,32 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   } = props;
 
   /**
+   * Zooms out from the workspace.
+   */
+  const zoomOut = () => {
+    let zoomRatio = canvas.getZoom();
+    zoomRatio -= 0.05;
+    zoomRatio = zoomRatio < 0.2 ? 0.2 : zoomRatio;
+
+    const center = canvas.getCenter();
+
+    canvas.zoomToPoint(new fabric.Point(center.left, center.top), zoomRatio);
+  };
+
+  /**
+   * Zooms in to the workspace.
+   */
+  const zoomIn = () => {
+    let zoomRatio = canvas.getZoom();
+    zoomRatio += 0.05;
+    zoomRatio = zoomRatio > 1.5 ? 1.5 : zoomRatio;
+
+    const center = canvas.getCenter();
+
+    canvas.zoomToPoint(new fabric.Point(center.left, center.top), zoomRatio);
+  };
+
+  /**
    * Changes the workspace size.
    */
   const changeSize = (value: { width: number; height: number }) => {
@@ -624,6 +650,9 @@ const buildEditor = (props: BuildEditorProps): Editor => {
   return {
     copy,
     paste,
+    zoomIn,
+    zoomOut,
+    autoZoom,
     changeSize,
     changeBackground,
     enableDrawMode,
