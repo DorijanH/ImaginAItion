@@ -32,6 +32,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "react-use": "^17.5.1",
     "replicate": "^0.32.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",

@@ -24,6 +24,7 @@ import {
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME
 } from '../constants';
+import { useHotkeys } from './use-hotkeys';
 import { useHistory } from './use-history';
 import { useClipboard } from './use-clipboard';
 import { useCanvasEvents } from './use-canvas-events';
@@ -737,6 +738,14 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
     canvas,
     setSelectedObjects,
     clearSelectionCallback
+  });
+  useHotkeys({
+    canvas,
+    copy,
+    paste,
+    redo,
+    save,
+    undo
   });
 
   const editor = useMemo(() => {
