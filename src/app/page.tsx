@@ -1,11 +1,9 @@
-import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+
+import { protectServer } from '@/features/auth/helpers';
 
 export default async function Home() {
-  const session = await auth();
+  await protectServer();
 
-  return (
-    <div>
-      {JSON.stringify(session)}
-    </div>
-  );
+  redirect('/editor/project-1');
 }

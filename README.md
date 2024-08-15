@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./public/logo.svg" />
+  <img src="./public/icons/logo.svg" />
 
   <p>ImaginAItion</p>
 </h1>

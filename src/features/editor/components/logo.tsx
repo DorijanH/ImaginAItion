@@ -10,7 +10,7 @@ export default function Logo() {
         <Image
           fill
           priority
-          src="/logo.svg"
+          src="/icons/logo.svg"
           alt="ImaginAItion"
           className="shrink-0 transition hover:opacity-75"
         />
