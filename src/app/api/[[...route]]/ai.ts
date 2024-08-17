@@ -1,12 +1,14 @@
 import { z } from 'zod';
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
+import { verifyAuth } from '@hono/auth-js';
 
 import { replicate } from '@/lib/replicate';
 
 const ai = new Hono()
   .post(
     '/generate-image',
+    verifyAuth(),
     zValidator('json', z.object({ prompt: z.string() })),
     async (c) => {
       const { prompt } = c.req.valid('json');
@@ -24,6 +26,7 @@ const ai = new Hono()
   )
   .post(
     '/remove-bg',
+    verifyAuth(),
     zValidator('json', z.object({ imageUrl: z.string() })),
     async (c) => {
       const { imageUrl } = c.req.valid('json');
