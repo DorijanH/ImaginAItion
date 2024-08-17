@@ -3,9 +3,14 @@
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { IconType } from 'react-icons';
+import { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { TriangleAlert } from 'lucide-react';
 
+import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 import {
   Card,
   CardContent,
@@ -16,6 +21,21 @@ import {
 import { Button } from '@/components/ui/button';
 
 export default function LoginCard() {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const params = useSearchParams();
+  const error = params.get('error');
+
+  /**
+   * Handles the credentials sign in action.
+   */
+  const handleCredentialsSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    signIn('credentials', { email, password });
+  };
+
   /**
    * Handles the provider sign in action.
    */
@@ -35,7 +55,42 @@ export default function LoginCard() {
         </CardDescription>
       </CardHeader>
 
+      {!!error && (
+        <div className="mb-6 flex items-center gap-x-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+          <TriangleAlert className="size-4" />
+          <p>Invalid email or password</p>
+        </div>
+      )}
+
       <CardContent className="space-y-5 px-0 pb-0">
+        <form onSubmit={handleCredentialsSignIn} className="space-y-2.5">
+          <Input
+            required
+            type="email"
+            value={email}
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <Input
+            required
+            type="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button
+            size="lg"
+            type="submit"
+            className="w-full"
+          >
+            Continue
+          </Button>
+        </form>
+
+        <Separator />
+
         <div className="flex flex-col gap-y-2.5">
           <ProviderButton
             icon={FaGithub}

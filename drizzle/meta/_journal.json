@@ -8,6 +8,13 @@
       "when": 1723734204856,
       "tag": "0000_yielding_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723850110257,
+      "tag": "0001_nifty_sentry",
+      "breakpoints": true
     }
   ]
 }
