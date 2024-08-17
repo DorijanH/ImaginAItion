@@ -62,7 +62,7 @@ export default function RegisterCard() {
         </CardDescription>
       </CardHeader>
 
-      {!!isError && (
+      {isError && (
         <div className="mb-6 flex items-center gap-x-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
           <TriangleAlert className="size-4" />
           <p>Something went wrong</p>
