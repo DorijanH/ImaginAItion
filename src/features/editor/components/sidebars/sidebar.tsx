@@ -103,11 +103,12 @@ function SidebarItem(props: SidebarItemProps) {
       variant="ghost"
       onClick={onClick}
       className={cn(
-        'flex aspect-video size-full flex-col rounded-none p-3 py-4',
+        'flex aspect-video size-full flex-col rounded-none px-3 py-4',
         isActive && 'bg-muted text-primary'
       )}
     >
       <Icon className="size-5 shrink-0 stroke-2" />
+
       <span className="mt-2 text-xs">
         {label}
       </span>

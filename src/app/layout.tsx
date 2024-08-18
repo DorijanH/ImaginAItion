@@ -8,7 +8,7 @@ import { Toaster } from '@/components/ui/sonner';
 import Providers from '@/components/providers/providers';
 import { auth } from '@/auth';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'ImaginAItion',
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={font.className}>
           <Providers>
             {children}
           </Providers>
