@@ -6,6 +6,7 @@ import { BsCloudCheck } from 'react-icons/bs';
 import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import UserButton from '@/features/auth/components/user-button';
 import { Separator } from '@/components/ui/separator';
 import {
   DropdownMenu,
@@ -221,7 +222,7 @@ export default function Navbar(props: NavbarProps) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* TODO: Add user-button */}
+          <UserButton />
         </div>
       </div>
     </nav>

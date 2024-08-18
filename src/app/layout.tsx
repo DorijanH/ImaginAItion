@@ -1,3 +1,4 @@
+import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import './globals.css';
@@ -5,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 
 import { Toaster } from '@/components/ui/sonner';
 import Providers from '@/components/providers/providers';
+import { auth } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,17 +19,21 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await auth();
 
-        <Toaster />
-        <Analytics />
-      </body>
-    </html>
+  return (
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={inter.className}>
+          <Providers>
+            {children}
+          </Providers>
+
+          <Toaster />
+          <Analytics />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
