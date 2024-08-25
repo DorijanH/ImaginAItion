@@ -30,7 +30,9 @@ import {
   TEXT_ALIGN,
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
-  WORKSPACE_NAME
+  WORKSPACE_HEIGHT,
+  WORKSPACE_NAME,
+  WORKSPACE_WIDTH
 } from '../constants';
 import { useWindowEvents } from './use-window-events';
 import { useHotkeys } from './use-hotkeys';
@@ -887,8 +889,8 @@ export function useEditor({ clearSelectionCallback }: UseEditorProps) {
     });
 
     const initialWorkspace = new fabric.Rect({
-      width: 900,
-      height: 1200,
+      width: WORKSPACE_WIDTH,
+      height: WORKSPACE_HEIGHT,
       name: WORKSPACE_NAME,
       fill: 'white',
       selectable: false,

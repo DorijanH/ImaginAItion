@@ -5,6 +5,7 @@ import { AuthConfig, initAuthConfig } from '@hono/auth-js';
 import authConfig from '@/auth.config';
 
 import users from './users';
+import projects from './projects';
 import images from './images';
 import ai from './ai';
 
@@ -25,7 +26,8 @@ app.use('*', initAuthConfig(getAuthConfig));
 const routes = app
   .route('/images', images)
   .route('/ai', ai)
-  .route('/users', users);
+  .route('/users', users)
+  .route('/projects', projects);
 
 export type AppType = typeof routes;
 

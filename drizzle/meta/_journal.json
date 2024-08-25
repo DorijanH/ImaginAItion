@@ -15,6 +15,13 @@
       "when": 1723850110257,
       "tag": "0001_nifty_sentry",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724544738222,
+      "tag": "0002_organic_skaar",
+      "breakpoints": true
     }
   ]
 }

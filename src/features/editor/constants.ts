@@ -3,6 +3,8 @@ import * as material from 'material-colors';
 import { ActiveTool } from './types';
 
 export const WORKSPACE_NAME = 'workspace';
+export const WORKSPACE_WIDTH = 900;
+export const WORKSPACE_HEIGHT = 1200;
 
 export const FILL_COLOR = 'rgba(0, 0, 0, 1)';
 export const STROKE_COLOR = 'rgba(0, 0, 0, 1)';
